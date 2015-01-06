@@ -123,8 +123,17 @@ Eval compute in (next_weekday (next_weekday saturday)).
 (** Second, we can record what we _expect_ the result to be in
     the form of a Coq example: *)
 
+Definition compose {A B C} (g : B -> C) (f : A -> B) :=
+  fun x : A => g (f x).
+
+Hint Unfold compose.
+
+Notation " g ∘ f " := (compose g f) (at level 40, left associativity) : program_scope.
+
+Local Open Scope program_scope.
+
 Example test_next_weekday:
-  (next_weekday (next_weekday saturday)) = tuesday.
+  (next_weekday ∘ next_weekday) saturday = tuesday.
 
 (** This declaration does two things: it makes an
     assertion (that the second weekday after [saturday] is [tuesday]),
@@ -231,19 +240,25 @@ Proof. reflexivity.  Qed.
     its inputs are [false]. *)
 
 Definition nandb (b1:bool) (b2:bool) : bool :=
-  (* FILL IN HERE *) admit.
+  match b1 with
+    | false => true
+    | true => match b2 with
+                | false => true
+                | true => false
+              end
+  end.
 
 (** Remove "[Admitted.]" and fill in each proof with
     "[Proof. reflexivity. Qed.]" *)
 
 Example test_nandb1:               (nandb true false) = true.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 Example test_nandb2:               (nandb false false) = true.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 Example test_nandb3:               (nandb false true) = true.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 Example test_nandb4:               (nandb true true) = false.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (** **** Exercise: 1 star (andb3) *)
@@ -252,16 +267,16 @@ Example test_nandb4:               (nandb true true) = false.
     otherwise. *)
 
 Definition andb3 (b1:bool) (b2:bool) (b3:bool) : bool :=
-  (* FILL IN HERE *) admit.
+  andb b1 (andb b2 b3).
 
 Example test_andb31:                 (andb3 true true true) = true.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 Example test_andb32:                 (andb3 false true true) = false.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 Example test_andb33:                 (andb3 true false true) = false.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 Example test_andb34:                 (andb3 true true false) = false.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (* ###################################################################### *)
@@ -413,6 +428,8 @@ Example test_oddb1:    (oddb (S O)) = true.
 Proof. reflexivity.  Qed.
 Example test_oddb2:    (oddb (S (S (S (S O))))) = false.
 Proof. reflexivity.  Qed.
+Example quack: (oddb 87) = true.
+Proof. reflexivity. Qed.
 
 (** Naturally, we can also define multi-argument functions by
     recursion.  (Once again, we use a module to avoid polluting the
@@ -464,6 +481,9 @@ Fixpoint minus (n m:nat) : nat :=
   | S n', S m' => minus n' m'
   end.
 
+Example test_minus1: (minus 5 2) = 3.
+Proof. reflexivity. Qed.
+
 (** The _ in the first line is a _wildcard pattern_.  Writing _ in a
     pattern is the same as writing some variable that doesn't get used
     on the right-hand side.  This avoids the need to invent a bogus
@@ -486,12 +506,16 @@ Fixpoint exp (base power : nat) : nat :=
     Translate this into Coq. *)
 
 Fixpoint factorial (n:nat) : nat :=
-(* FILL IN HERE *) admit.
+  match n with
+    | 0 => 1
+    | S n' => (S n') * factorial n'
+  end.
 
 Example test_factorial1:          (factorial 3) = 6.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
+
 Example test_factorial2:          (factorial 5) = (mult 10 12).
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (** We can make numerical expressions a little easier to read and
@@ -570,14 +594,14 @@ Proof. reflexivity.  Qed.
     simple, elegant solution for which [simpl] suffices. *)
 
 Definition blt_nat (n m : nat) : bool :=
-  (* FILL IN HERE *) admit.
+  andb (ble_nat n m) (negb (beq_nat n m)).
 
 Example test_blt_nat1:             (blt_nat 2 2) = false.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity.  Qed.
 Example test_blt_nat2:             (blt_nat 2 4) = true.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity.  Qed.
 Example test_blt_nat3:             (blt_nat 4 2) = false.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity.  Qed.
 (** [] *)
 
 (* ###################################################################### *)
@@ -610,7 +634,6 @@ Example test_blt_nat3:             (blt_nat 4 2) = false.
 Theorem plus_O_n : forall n : nat, 0 + n = n.
 Proof.
   intros n. reflexivity.  Qed.
-
 
 (** (_Note_: You may notice that the above statement looks
     different in the original source file and the final html output. In Coq
@@ -686,7 +709,7 @@ Theorem plus_id_example : forall n m:nat,
 Proof.
   intros n m.   (* move both quantifiers into the context *)
   intros H.     (* move the hypothesis into the context *)
-  rewrite -> H. (* Rewrite the goal using the hypothesis *)
+  rewrite H. (* Rewrite the goal using the hypothesis *)
   reflexivity.  Qed.
 
 (** The first line of the proof moves the universally quantified
@@ -708,8 +731,12 @@ Proof.
 Theorem plus_id_exercise : forall n m o : nat,
   n = m -> m = o -> n + m = m + o.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros n m o H I.
+  rewrite H.
+  rewrite I.
+  reflexivity.
+Qed.
+  (** [] *)
 
 (** As we've seen in earlier examples, the [Admitted] command
     tells Coq that we want to skip trying to prove this theorem and
@@ -738,8 +765,13 @@ Theorem mult_S_1 : forall n m : nat,
   m = S n ->
   m * (1 + n) = m * m.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros n m.
+  intros H.
+  rewrite plus_1_l.
+  rewrite H.
+  reflexivity.
+Qed.
+  (** [] *)
 
 
 
@@ -824,7 +856,11 @@ Proof.
 Theorem zero_nbeq_plus_1 : forall n : nat,
   beq_nat 0 (n + 1) = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n.
+  destruct n.
+  reflexivity.
+  reflexivity.
+Qed.
 (** [] *)
 
 (* ###################################################################### *)
@@ -839,13 +875,28 @@ Theorem identity_fn_applied_twice :
   (forall (x : bool), f x = x) ->
   forall (b : bool), f (f b) = b.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  rewrite H.
+  rewrite H.
+  reflexivity.
+Qed.
 
 (** Now state and prove a theorem [negation_fn_applied_twice] similar
     to the previous one but where the second hypothesis says that the
     function [f] has the property that [f x = negb x].*)
 
-(* FILL IN HERE *)
+Theorem negation_fn_applied_twice :
+  forall (f : bool -> bool),
+  (forall (x : bool), f x = negb x) ->
+  forall (b : bool), f (f b) = b.
+Proof.
+  intros.
+  rewrite H.
+  rewrite H.
+  destruct b.
+  reflexivity.
+  reflexivity.
+Qed.
 
 (** **** Exercise: 2 stars (andb_eq_orb) *)
 (** Prove the following theorem.  (You may want to first prove a
@@ -857,7 +908,18 @@ Theorem andb_eq_orb :
   (andb b c = orb b c) ->
   b = c.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros a b.
+  destruct a as [false|true].
+  simpl.
+  intros H.
+  rewrite H.
+  reflexivity.
+  simpl.
+  intros I.
+  rewrite I.
+  reflexivity.
+Qed.
+
 
 (** **** Exercise: 3 stars (binary) *)
 (** Consider a different, more efficient representation of natural
@@ -894,7 +956,42 @@ Proof.
         converting it to unary and then incrementing.
 *)
 
-(* FILL IN HERE *)
+Inductive bin : Type :=
+| BO : bin         (* Zero *)
+| BT : bin -> bin  (* Twice *)
+| BM : bin -> bin. (* One more than twice *)
+
+Fixpoint bin_inc n :=
+  match n with
+    | BO => BM BO
+    | BT n' => BM n'
+    | BM n' => BT (bin_inc n')
+  end.
+
+Fixpoint bin_to_unary n :=
+  match n with
+    | BO => O
+    | BT n' => bin_to_unary n' * 2
+    | BM n' => 1 + (bin_to_unary n' * 2)
+  end.
+
+Eval compute in bin_to_unary (bin_inc (bin_inc (bin_inc BO))).
+
+Theorem bin_un_comm : forall n : bin,
+                        bin_to_unary (bin_inc n) = 1 + bin_to_unary n.
+Proof.
+  intros.
+  induction n.
+  simpl.
+  reflexivity.
+  simpl.
+  reflexivity.
+  simpl.
+  rewrite IHn.
+  simpl.
+  reflexivity.
+Qed.
+
 (** [] *)
 
 (* ###################################################################### *)
@@ -960,8 +1057,7 @@ Fixpoint plus' (n : nat) (m : nat) : nat :=
     _does_ terminate on all inputs, but that Coq will _not_ accept
     because of this restriction. *)
 
-(* FILL IN HERE *)
+
 (** [] *)
 
 (* $Date: 2013-12-03 07:45:41 -0500 (Tue, 03 Dec 2013) $ *)
-

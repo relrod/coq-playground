@@ -28,7 +28,7 @@ Require Export Basics.
 
 (** The fact that there is no explicit command for moving from
     one branch of a case analysis to the next can make proof scripts
-    rather hard to read.  In larger proofs, with nested case analyses,
+    rather hard to reannd.  In larger proofs, with nested case analyses,
     it can even become hard to stay oriented when you're sitting with
     Coq and stepping through the proof.  (Imagine trying to remember
     that the first five subgoals belong to the inner case analysis and
@@ -107,7 +107,18 @@ Qed.
 Theorem andb_true_elim2 : forall b c : bool,
   andb b c = true -> c = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  destruct c.
+  Case "c t".
+  reflexivity.
+  Case "c f".
+  rewrite <- H.
+  destruct b.
+  simpl.
+  reflexivity.
+  simpl.
+  reflexivity.
+Qed.
 (** [] *)
 
 (** There are no hard and fast rules for how proofs should be
@@ -209,10 +220,9 @@ Proof.
 Theorem minus_diag : forall n,
   minus n n = 0.
 Proof.
-  (* WORKED IN CLASS *)
   intros n. induction n as [| n'].
   Case "n = 0".
-    simpl. reflexivity.
+    reflexivity.
   Case "n = S n'".
     simpl. rewrite -> IHn'. reflexivity.  Qed.
 
@@ -222,27 +232,65 @@ Proof.
     previously proven results. *)
 
 Theorem mult_0_r : forall n:nat,
-  n * 0 = 0.
+                     n * 0 = 0.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n.
+  induction n.
+  reflexivity.
+  simpl.
+  rewrite IHn.
+  reflexivity.
+Qed.
+
+
+Theorem mult_0_l : forall n:nat,
+                     0 * n = 0.
+Proof.
+  reflexivity.
+Qed.
 
 Theorem plus_n_Sm : forall n m : nat,
-  S (n + m) = n + (S m).
+                      S (n + m) = n + (S m).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction n.
+  simpl.
+  trivial.
+  simpl.
+  rewrite -> IHn.
+  trivial.
+Qed.
 
-
-Theorem plus_comm : forall n m : nat,
+  Theorem plus_comm : forall n m : nat,
   n + m = m + n.
 Proof.
-  (* FILL IN HERE *) Admitted.
-
+  intros.
+  induction n.
+  trivial.
+  simpl.
+  rewrite <- plus_n_Sm.
+  rewrite IHn.
+  trivial.
+Qed.
 
 Theorem plus_assoc : forall n m p : nat,
   n + (m + p) = (n + m) + p.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros.
+  induction n.
+  simpl.
+  trivial.
+  simpl.
+  rewrite IHn.
+  trivial.
+Qed.
+
+
+
+
+
+
+  (** [] *)
 
 (** **** Exercise: 2 stars (double_plus) *)
 
@@ -258,9 +306,15 @@ Fixpoint double (n:nat) :=
 
 Lemma double_plus : forall n, double n = n + n .
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
-
+  intros.
+  induction n.
+  simpl.
+  trivial.
+  simpl.
+  rewrite IHn.
+  rewrite plus_n_Sm.
+  trivial.
+Qed.
 
 (** **** Exercise: 1 star (destruct_induction) *)
 (** Briefly explain the difference between the tactics
@@ -293,7 +347,7 @@ Theorem mult_0_plus' : forall n m : nat,
 Proof.
   intros n m.
   assert (H: 0 + n = n).
-    Case "Proof of assertion". reflexivity.
+    Case "Proof of assertion". simpl. trivial.
   rewrite -> H.
   reflexivity.  Qed.
 
@@ -354,30 +408,79 @@ Proof.
     use induction. *)
 
 Theorem plus_swap : forall n m p : nat,
-  n + (m + p) = m + (n + p).
+                      n + (m + p) = m + (n + p).
 Proof.
-  (* FILL IN HERE *) Admitted.
-
+  intros.
+  rewrite plus_comm.
+  rewrite plus_assoc.
+  assert (H: p + n = n + p).
+  rewrite plus_comm.
+  trivial.
+  rewrite <- plus_assoc.
+  rewrite H.
+  rewrite plus_assoc.
+  trivial.
+Qed.
 
 (** Now prove commutativity of multiplication.  (You will probably
     need to define and prove a separate subsidiary theorem to be used
     in the proof of this one.)  You may find that [plus_swap] comes in
     handy. *)
 
+
+Theorem mult_n_Sm : forall n m : nat,
+                      n + n * m = n * (S m).
+Proof.
+  intros.
+  induction n.
+  induction m.
+  simpl.
+  trivial.
+  trivial.
+  simpl.
+  rewrite <- IHn.
+  rewrite -> plus_assoc.
+  rewrite -> plus_assoc.
+  assert (H : n + m = m + n).
+  rewrite plus_comm.
+  trivial.
+  rewrite H.
+  trivial.
+
 Theorem mult_comm : forall m n : nat,
  m * n = n * m.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros.
+  induction m.
+  rewrite mult_0_r.
+  trivial.
+  simpl.
+  rewrite IHm.
+  rewrite <- mult_n_Sm.
+  rewrite plus_comm.
+  trivial.
+Qed.
 
 (** **** Exercise: 2 stars, optional (evenb_n__oddb_Sn) *)
 
 (** Prove the following simple fact: *)
 
+
 Theorem evenb_n__oddb_Sn : forall n : nat,
   evenb n = negb (evenb (S n)).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction n.
+  reflexivity.
+  assert (H : evenb n = evenb (S (S n))).
+  reflexivity.
+  rewrite <- H.
+  rewrite IHn.
+  rewrite negb_involutive.
+  reflexivity.
+Qed.
+
+
 (** [] *)
 
 (* ###################################################################### *)
@@ -395,31 +498,63 @@ Proof.
 Theorem ble_nat_refl : forall n:nat,
   true = ble_nat n n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction n as [|n'].
+  simpl.
+  trivial.
+  rewrite IHn'.
+  simpl.
+  trivial.
+Qed.
 
-Theorem zero_nbeq_S : forall n:nat,
+Theorem zero_nbeq_S : forall n : nat,
   beq_nat 0 (S n) = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  simpl.
+  trivial.
+Qed.
+
 
 Theorem andb_false_r : forall b : bool,
   andb b false = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  destruct b as [t|f].
+  reflexivity.
+  reflexivity.
+Qed.
 
-Theorem plus_ble_compat_l : forall n m p : nat,
+  Theorem plus_ble_compat_l : forall n m p : nat,
   ble_nat n m = true -> ble_nat (p + n) (p + m) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction p.
+  simpl.
+  apply H.
+  simpl.
+  rewrite IHp.
+  trivial.
+Qed.
 
-Theorem S_nbeq_0 : forall n:nat,
+Theorem S_nbeq_0 : forall n : nat,
   beq_nat (S n) 0 = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  simpl.
+  trivial.
+Qed.
 
-Theorem mult_1_l : forall n:nat, 1 * n = n.
+Theorem mult_1_l : forall n : nat, 1 * n = n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction n.
+  simpl.
+  trivial.
+  simpl.
+  rewrite plus_0_r.
+  trivial.
+Qed.
 
 Theorem all3_spec : forall b c : bool,
     orb
@@ -428,12 +563,57 @@ Theorem all3_spec : forall b c : bool,
                (negb c))
   = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  destruct b.
+  destruct c.
+  reflexivity.
+  reflexivity.
+  reflexivity.
+Qed.
+
+Theorem mult_plus_distr_l : forall n m p : nat,
+                              p * (n + m) = (p * n) + (p * m).
+Proof.
+  intros.
+  induction n.
+  simpl.
+  rewrite <- plus_O_n.
+  simpl.
+  rewrite mult_0_r.
+  simpl.
+  trivial.
+  simpl.
+  rewrite <- mult_n_Sm, <- mult_n_Sm.
+  rewrite IHn.
+  rewrite mult_comm.
+  rewrite -> mult_comm.
+  rewrite mult_comm.
+  rewrite <- mult_comm.
+  rewrite <- mult_comm.
+  rewrite <- plus_assoc.
+  rewrite <- plus_assoc.
+  assert (I : p * m + p = p + p * m).
+  rewrite plus_comm.
+  trivial.
+  rewrite I.
+  trivial.
+Qed.
+
 
 Theorem mult_plus_distr_r : forall n m p : nat,
   (n + m) * p = (n * p) + (m * p).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+
+
+
+
+
+
+
+
+
+
 
 Theorem mult_assoc : forall n m p : nat,
   n * (m * p) = (n * m) * p.
