@@ -30,7 +30,7 @@ Require Export MoreStlc.
    a one-field record to an argument that actually provides two
    fields, while the [T_App] rule demands that the domain type of the
    function being applied must match the type of the argument
-   precisely.  
+   precisely.
 
    But this is silly: we're passing the function a _better_ argument
    than it needs!  The only thing the body of the function can
@@ -153,8 +153,8 @@ Require Export MoreStlc.
                               S <: U    U <: T
                               ----------------                        (S_Trans)
                                    S <: T
-    ... and a rule of _reflexivity_, since certainly any type [T] is 
-    as good as itself:  
+    ... and a rule of _reflexivity_, since certainly any type [T] is
+    as good as itself:
                                    ------                              (S_Refl)
                                    T <: T
 *)
@@ -172,7 +172,7 @@ Require Export MoreStlc.
 (** *** Arrows *)
 
 (** Suppose we have two functions [f] and [g] with these types:
-       f : C -> Student 
+       f : C -> Student
        g : (C->Person) -> D
     That is, [f] is a function that yields a record of type [Student],
     and [g] is a (higher-order) function that expects its (function)
@@ -202,9 +202,9 @@ Require Export MoreStlc.
     in order to conclude that [S1->S2] to be a subtype of [T1->T2], it
     must be the case that [T1] is a subtype of [S1].  The arrow
     constructor is said to be _contravariant_ in its first argument
-    and _covariant_ in its second. 
+    and _covariant_ in its second.
 
-    Here is an example that illustrates this: 
+    Here is an example that illustrates this:
        f : Person -> C
        g : (Student -> C) -> D
     The application [g f] is safe, because the only thing the body of
@@ -220,7 +220,7 @@ Require Export MoreStlc.
     [f] also tells us that it returns elements of type [S2]; we can
     also view these results belonging to any supertype [T2] of
     [S2]. That is, any function [f] of type [S1->S2] can also be
-    viewed as having type [T1->T2]. 
+    viewed as having type [T1->T2].
 *)
 
 (** *** Records *)
@@ -248,7 +248,7 @@ Require Export MoreStlc.
    This is known as "depth subtyping". *)
 
 (** Finally, although the fields of a record type are written in a
-   particular order, the order does not really matter. For example, 
+   particular order, the order does not really matter. For example,
        {name:String,age:Nat} <: {age:Nat,name:String}
    This is known as "permutation subtyping". *)
 
@@ -269,7 +269,7 @@ Require Export MoreStlc.
 (** First, adding fields to the end of a record type gives a subtype:
                                n > m
                  ---------------------------------                 (S_RcdWidth)
-                 {i1:T1...in:Tn} <: {i1:T1...im:Tm} 
+                 {i1:T1...in:Tn} <: {i1:T1...im:Tm}
    We can use [S_RcdWidth] to drop later fields of a multi-field
    record while keeping earlier fields, showing for example that
    [{age:Nat,name:String} <: {name:String}]. *)
@@ -345,13 +345,13 @@ Require Export MoreStlc.
 
     - adding a base type [Top],
 
-    - adding the rule of subsumption 
+    - adding the rule of subsumption
                          Gamma |- t : S     S <: T
                          -------------------------                      (T_Sub)
                                Gamma |- t : T
       to the typing relation, and
 
-    - defining a subtype relation as follows: 
+    - defining a subtype relation as follows:
                               S <: U    U <: T
                               ----------------                        (S_Trans)
                                    S <: T
@@ -372,7 +372,7 @@ Require Export MoreStlc.
 
                                n > m
                  ---------------------------------                 (S_RcdWidth)
-                 {i1:T1...in:Tn} <: {i1:T1...im:Tm} 
+                 {i1:T1...in:Tn} <: {i1:T1...im:Tm}
 
                        S1 <: T1  ...  Sn <: Tn
                   ----------------------------------               (S_RcdDepth)
@@ -391,7 +391,7 @@ Require Export MoreStlc.
 (** **** Exercise: 1 star, optional (subtype_instances_tf_1) *)
 (** Suppose we have types [S], [T], [U], and [V] with [S <: T]
     and [U <: V].  Which of the following subtyping assertions
-    are then true?  Write _true_ or _false_ after each one.  
+    are then true?  Write _true_ or _false_ after each one.
     ([A], [B], and [C] here are base types.)
 
     - [T->S <: T->S]
@@ -442,18 +442,18 @@ Where does the type [Top->Top->Student] fit into this order?
       forall S T1 T2,
            (S <: T1 -> T2) ->
            exists S1 S2,
-              S = S1 -> S2  /\  T1 <: S1  /\  S2 <: T2 
+              S = S1 -> S2  /\  T1 <: S1  /\  S2 <: T2
 
       exists S,
-           S <: S->S 
+           S <: S->S
 
       exists S,
-           S->S <: S   
+           S->S <: S
 
       forall S T1 T2,
            S <: T1*T2 ->
            exists S1 S2,
-              S = S1*S2  /\  S1 <: T1  /\  S2 <: T2  
+              S = S1*S2  /\  S1 <: T1  /\  S2 <: T2
 [] *)
 
 (** **** Exercise: 1 star (subtype_concepts_tf) *)
@@ -494,12 +494,12 @@ Where does the type [Top->Top->Student] fit into this order?
          ~(exists n, T = TBase n) ->
          exists S,
             S <: T  /\  S <> T
-]] 
+]]
 []
 *)
 
 (** **** Exercise: 2 stars (small_large_1) *)
-(** 
+(**
    - What is the _smallest_ type [T] ("smallest" in the subtype
      relation) that makes the following assertion true?  (Assume we
      have [Unit] among the base types and [unit] as a constant of this
@@ -512,7 +512,7 @@ Where does the type [Top->Top->Student] fit into this order?
 *)
 
 (** **** Exercise: 2 stars (small_large_2) *)
-(** 
+(**
    - What is the _smallest_ type [T] that makes the following
      assertion true?
        empty |- (\p:(A->A * B->B). p) ((\z:A.z), (\z:B.z)) : T
@@ -523,7 +523,7 @@ Where does the type [Top->Top->Student] fit into this order?
 *)
 
 (** **** Exercise: 2 stars, optional (small_large_3) *)
-(** 
+(**
    - What is the _smallest_ type [T] that makes the following
      assertion true?
        a:A |- (\p:(A*T). (p.snd) (p.fst)) (a , \z:A.z) : A
@@ -537,7 +537,7 @@ Where does the type [Top->Top->Student] fit into this order?
 
 
 (** **** Exercise: 2 stars (small_large_4) *)
-(** 
+(**
    - What is the _smallest_ type [T] that makes the following
      assertion true?
        exists S,
@@ -552,9 +552,9 @@ Where does the type [Top->Top->Student] fit into this order?
 (** **** Exercise: 2 stars (smallest_1) *)
 (** What is the _smallest_ type [T] that makes the following
     assertion true?
-      exists S, exists t, 
+      exists S, exists t,
         empty |- (\x:T. x x) t : S
-]] 
+]]
 []
 *)
 
@@ -562,7 +562,7 @@ Where does the type [Top->Top->Student] fit into this order?
 (** What is the _smallest_ type [T] that makes the following
     assertion true?
       empty |- (\x:Top. x) ((\z:A.z) , (\z:B.z)) : T
-]] 
+]]
 []
 *)
 
@@ -582,7 +582,7 @@ Where does the type [Top->Top->Student] fit into this order?
                             S1 <: T1    S2 <: T2
                             --------------------                        (S_Prod)
                                S1*S2 <: T1*T2
-intuitively corresponds to the "depth" subtyping rule for records. Extending the analogy, we might consider adding a "permutation" rule 
+intuitively corresponds to the "depth" subtyping rule for records. Extending the analogy, we might consider adding a "permutation" rule
                                    --------------
                                    T1*T2 <: T2*T1
 for products.
@@ -626,9 +626,9 @@ Inductive ty : Type :=
 
 Tactic Notation "T_cases" tactic(first) ident(c) :=
   first;
-  [ Case_aux c "TTop" | Case_aux c "TBool" 
-  | Case_aux c "TBase" | Case_aux c "TArrow" 
-  | Case_aux c "TUnit" | 
+  [ Case_aux c "TTop" | Case_aux c "TBool"
+  | Case_aux c "TBase" | Case_aux c "TArrow"
+  | Case_aux c "TUnit" |
   ].
 
 Inductive tm : Type :=
@@ -638,15 +638,15 @@ Inductive tm : Type :=
   | ttrue : tm
   | tfalse : tm
   | tif : tm -> tm -> tm -> tm
-  | tunit : tm 
+  | tunit : tm
 .
 
 Tactic Notation "t_cases" tactic(first) ident(c) :=
   first;
-  [ Case_aux c "tvar" | Case_aux c "tapp" 
-  | Case_aux c "tabs" | Case_aux c "ttrue" 
+  [ Case_aux c "tvar" | Case_aux c "tapp"
+  | Case_aux c "tabs" | Case_aux c "ttrue"
   | Case_aux c "tfalse" | Case_aux c "tif"
-  | Case_aux c "tunit" 
+  | Case_aux c "tunit"
   ].
 
 (* ################################### *)
@@ -657,20 +657,20 @@ Tactic Notation "t_cases" tactic(first) ident(c) :=
 
 Fixpoint subst (x:id) (s:tm)  (t:tm) : tm :=
   match t with
-  | tvar y => 
+  | tvar y =>
       if eq_id_dec x y then s else t
-  | tabs y T t1 => 
+  | tabs y T t1 =>
       tabs y T (if eq_id_dec x y then t1 else (subst x s t1))
-  | tapp t1 t2 => 
+  | tapp t1 t2 =>
       tapp (subst x s t1) (subst x s t2)
-  | ttrue => 
+  | ttrue =>
       ttrue
-  | tfalse => 
+  | tfalse =>
       tfalse
-  | tif t1 t2 t3 => 
+  | tif t1 t2 t3 =>
       tif (subst x s t1) (subst x s t2) (subst x s t3)
-  | tunit => 
-      tunit 
+  | tunit =>
+      tunit
   end.
 
 Notation "'[' x ':=' s ']' t" := (subst x s t) (at level 20).
@@ -684,11 +684,11 @@ Notation "'[' x ':=' s ']' t" := (subst x s t) (at level 20).
 Inductive value : tm -> Prop :=
   | v_abs : forall x T t,
       value (tabs x T t)
-  | v_true : 
+  | v_true :
       value ttrue
-  | v_false : 
+  | v_false :
       value tfalse
-  | v_unit : 
+  | v_unit :
       value tunit
 .
 
@@ -718,9 +718,9 @@ where "t1 '==>' t2" := (step t1 t2).
 
 Tactic Notation "step_cases" tactic(first) ident(c) :=
   first;
-  [ Case_aux c "ST_AppAbs" | Case_aux c "ST_App1" 
-  | Case_aux c "ST_App2" | Case_aux c "ST_IfTrue" 
-  | Case_aux c "ST_IfFalse" | Case_aux c "ST_If"  
+  [ Case_aux c "ST_AppAbs" | Case_aux c "ST_App1"
+  | Case_aux c "ST_App2" | Case_aux c "ST_IfTrue"
+  | Case_aux c "ST_IfFalse" | Case_aux c "ST_If"
   ].
 
 Hint Constructors step.
@@ -761,7 +761,7 @@ Hint Constructors subtype.
 Tactic Notation "subtype_cases" tactic(first) ident(c) :=
   first;
   [ Case_aux c "S_Refl" | Case_aux c "S_Trans"
-  | Case_aux c "S_Top" | Case_aux c "S_Arrow" 
+  | Case_aux c "S_Top" | Case_aux c "S_Arrow"
   ].
 
 Module Examples.
@@ -786,27 +786,27 @@ Notation Integer := (TBase (Id 11)).
     Using the encoding of records into pairs, define pair types
     representing the record types
     Person   := { name : String }
-    Student  := { name : String ; 
+    Student  := { name : String ;
                   gpa  : Float }
     Employee := { name : String ;
                   ssn  : Integer }
 *)
 
-Definition Person : ty := 
+Definition Person : ty :=
 (* FILL IN HERE *) admit.
-Definition Student : ty := 
+Definition Student : ty :=
 (* FILL IN HERE *) admit.
-Definition Employee : ty := 
+Definition Employee : ty :=
 (* FILL IN HERE *) admit.
 
 Example sub_student_person :
   Student <: Person.
-Proof. 
+Proof.
 (* FILL IN HERE *) Admitted.
 
 Example sub_employee_person :
   Employee <: Person.
-Proof. 
+Proof.
 (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -848,7 +848,7 @@ End Examples.
     of subsumption, [T_Sub]. *)
 
 Definition context := id -> (option ty).
-Definition empty : context := (fun _ => None). 
+Definition empty : context := (fun _ => None).
 Definition extend (Gamma : context) (x:id) (T : ty) :=
   fun x' => if eq_id_dec x x' then Some T else Gamma x'.
 
@@ -860,11 +860,11 @@ Inductive has_type : context -> tm -> ty -> Prop :=
       Gamma x = Some T ->
       Gamma |- (tvar x) \in T
   | T_Abs : forall Gamma x T11 T12 t12,
-      (extend Gamma x T11) |- t12 \in T12 -> 
+      (extend Gamma x T11) |- t12 \in T12 ->
       Gamma |- (tabs x T11 t12) \in (TArrow T11 T12)
   | T_App : forall T1 T2 Gamma t1 t2,
-      Gamma |- t1 \in (TArrow T1 T2) -> 
-      Gamma |- t2 \in T1 -> 
+      Gamma |- t1 \in (TArrow T1 T2) ->
+      Gamma |- t2 \in T1 ->
       Gamma |- (tapp t1 t2) \in T2
   | T_True : forall Gamma,
        Gamma |- ttrue \in TBool
@@ -889,10 +889,10 @@ Hint Constructors has_type.
 
 Tactic Notation "has_type_cases" tactic(first) ident(c) :=
   first;
-  [ Case_aux c "T_Var" | Case_aux c "T_Abs" 
-  | Case_aux c "T_App" | Case_aux c "T_True" 
+  [ Case_aux c "T_Var" | Case_aux c "T_Abs"
+  | Case_aux c "T_App" | Case_aux c "T_True"
   | Case_aux c "T_False" | Case_aux c "T_If"
-  | Case_aux c "T_Unit"     
+  | Case_aux c "T_Unit"
   | Case_aux c "T_Sub" ].
 
 (* ############################################### *)
@@ -906,13 +906,13 @@ Import Examples.
     formal statement in Coq and prove it. *)
 
 (** **** Exercise: 1 star, optional (typing_example_0) *)
-(* empty |- ((\z:A.z), (\z:B.z)) 
+(* empty |- ((\z:A.z), (\z:B.z))
           : (A->A * B->B) *)
 (* FILL IN HERE *)
 (** [] *)
 
 (** **** Exercise: 2 stars, optional (typing_example_1) *)
-(* empty |- (\x:(Top * B->B). x.snd) ((\z:A.z), (\z:B.z)) 
+(* empty |- (\x:(Top * B->B). x.snd) ((\z:A.z), (\z:B.z))
           : B->B *)
 (* FILL IN HERE *)
 (** [] *)
@@ -940,10 +940,10 @@ End Examples2.
 
 (** Before we look at the properties of the typing relation, we need
     to record a couple of critical structural properties of the subtype
-    relation: 
+    relation:
        - [Bool] is the only subtype of [Bool]
        - every subtype of an arrow type is itself an arrow type. *)
-    
+
 (** These are called _inversion lemmas_ because they play the same
     role in later proofs as the built-in [inversion] tactic: given a
     hypothesis that there exists a derivation of some subtyping
@@ -964,7 +964,7 @@ Proof with auto.
 (** **** Exercise: 3 stars, optional (sub_inversion_arrow) *)
 Lemma sub_inversion_arrow : forall U V1 V2,
      U <: (TArrow V1 V2) ->
-     exists U1, exists U2, 
+     exists U1, exists U2,
        U = (TArrow U1 U2) /\ (V1 <: U1) /\ (U2 <: V2).
 Proof with eauto.
   intros U V1 V2 Hs.
@@ -1036,9 +1036,9 @@ Qed.
 
 (** _Theorem_ (Progress): For any term [t] and type [T], if [empty |-
     t : T] then [t] is a value or [t ==> t'] for some term [t'].
- 
+
     _Proof_: Let [t] and [T] be given, with [empty |- t : T].  Proceed
-    by induction on the typing derivation.  
+    by induction on the typing derivation.
 
     The cases for [T_Abs], [T_Unit], [T_True] and [T_False] are
     immediate because abstractions, [unit], [true], and [false] are
@@ -1053,7 +1053,7 @@ Qed.
       a value or it steps, and either [t2] is a value or it steps.
       There are three possibilities to consider:
 
-      - Suppose [t1 ==> t1'] for some term [t1'].  Then [t1 t2 ==> t1' t2] 
+      - Suppose [t1 ==> t1'] for some term [t1'].  Then [t1 t2 ==> t1' t2]
         by [ST_App1].
 
       - Suppose [t1] is a value and [t2 ==> t2'] for some term [t2'].
@@ -1070,8 +1070,8 @@ Qed.
       are terms [t1], [t2], and [t3] such that [t = if t1 then t2 else
       t3], with [empty |- t1 : Bool] and with [empty |- t2 : T] and
       [empty |- t3 : T].  Moreover, by the induction hypothesis,
-      either [t1] is a value or it steps.  
-      
+      either [t1] is a value or it steps.
+
        - If [t1] is a value, then by the canonical forms lemma for
          booleans, either [t1 = true] or [t1 = false].  In either
          case, [t] can step, using rule [ST_IfTrue] or [ST_IfFalse].
@@ -1084,14 +1084,14 @@ Qed.
       subderivation.
 *)
 
-Theorem progress : forall t T, 
+Theorem progress : forall t T,
      empty |- t \in T ->
-     value t \/ exists t', t ==> t'. 
+     value t \/ exists t', t ==> t'.
 Proof with eauto.
   intros t T Ht.
   remember empty as Gamma.
   revert HeqGamma.
-  has_type_cases (induction Ht) Case; 
+  has_type_cases (induction Ht) Case;
     intros HeqGamma; subst...
   Case "T_Var".
     inversion H.
@@ -1112,7 +1112,7 @@ Proof with eauto.
     right.
     destruct IHHt1.
     SCase "t1 is a value"...
-      assert (t1 = ttrue \/ t1 = tfalse) 
+      assert (t1 = ttrue \/ t1 = tfalse)
         by (eapply canonical_forms_of_Bool; eauto).
       inversion H0; subst...
       inversion H. rename x into t1'. eauto.
@@ -1166,7 +1166,7 @@ Lemma typing_inversion_abs : forall Gamma x S1 t2 T,
 Proof with eauto.
   intros Gamma x S1 t2 T H.
   remember (tabs x S1 t2) as t.
-  has_type_cases (induction H) Case; 
+  has_type_cases (induction H) Case;
     inversion Heqt; subst; intros; try solve by inversion.
   Case "T_Abs".
     exists T12...
@@ -1183,7 +1183,7 @@ Lemma typing_inversion_var : forall Gamma x T,
 Proof with eauto.
   intros Gamma x T Hty.
   remember (tvar x) as t.
-  has_type_cases (induction Hty) Case; intros; 
+  has_type_cases (induction Hty) Case; intros;
     inversion Heqt; subst; try solve by inversion.
   Case "T_Var".
     exists T...
@@ -1226,7 +1226,7 @@ Qed.
 
 Lemma typing_inversion_if : forall Gamma t1 t2 t3 T,
   Gamma |- (tif t1 t2 t3) \in T ->
-  Gamma |- t1 \in TBool 
+  Gamma |- t1 \in TBool
   /\ Gamma |- t2 \in T
   /\ Gamma |- t3 \in T.
 Proof with eauto.
@@ -1254,9 +1254,9 @@ Qed.
     types can be packaged up as a useful "combination lemma" telling
     us exactly what we'll actually require below. *)
 
-Lemma abs_arrow : forall x S1 s2 T1 T2, 
+Lemma abs_arrow : forall x S1 s2 T1 T2,
   empty |- (tabs x S1 s2) \in (TArrow T1 T2) ->
-     T1 <: S1 
+     T1 <: S1
   /\ (extend empty x S1) |- s2 \in T2.
 Proof with eauto.
   intros x S1 s2 T1 T2 Hty.
@@ -1302,7 +1302,7 @@ Lemma context_invariance : forall Gamma Gamma' t S,
      Gamma' |- t \in S.
 Proof with eauto.
   intros. generalize dependent Gamma'.
-  has_type_cases (induction H) Case; 
+  has_type_cases (induction H) Case;
     intros Gamma' Heqv...
   Case "T_Var".
     apply T_Var... rewrite <- Heqv...
@@ -1323,7 +1323,7 @@ Lemma free_in_context : forall x t T Gamma,
    exists T', Gamma x = Some T'.
 Proof with eauto.
   intros x t T Gamma Hafi Htyp.
-  has_type_cases (induction Htyp) Case; 
+  has_type_cases (induction Htyp) Case;
       subst; inversion Hafi; subst...
   Case "T_Abs".
     destruct (IHHtyp H4) as [T Hctx]. exists T.
@@ -1349,7 +1349,7 @@ Proof with eauto.
   t_cases (induction t) Case; intros; simpl.
   Case "tvar".
     rename i into y.
-    destruct (typing_inversion_var _ _ _ Htypt) 
+    destruct (typing_inversion_var _ _ _ Htypt)
         as [T [Hctx Hsub]].
     unfold extend in Hctx.
     destruct (eq_id_dec x y)...
@@ -1358,16 +1358,16 @@ Proof with eauto.
       inversion Hctx; subst. clear Hctx.
       apply context_invariance with empty...
       intros x Hcontra.
-      destruct (free_in_context _ _ S empty Hcontra) 
+      destruct (free_in_context _ _ S empty Hcontra)
           as [T' HT']...
       inversion HT'.
   Case "tapp".
-    destruct (typing_inversion_app _ _ _ _ Htypt) 
+    destruct (typing_inversion_app _ _ _ _ Htypt)
         as [T1 [Htypt1 Htypt2]].
     eapply T_App...
   Case "tabs".
     rename i into y. rename t into T1.
-    destruct (typing_inversion_abs _ _ _ _ _ Htypt) 
+    destruct (typing_inversion_abs _ _ _ _ _ Htypt)
       as [T2 [Hsub Htypt2]].
     apply T_Sub with (TArrow T1 T2)... apply T_Abs...
     destruct (eq_id_dec x y).
@@ -1380,23 +1380,23 @@ Proof with eauto.
       apply IHt. eapply context_invariance...
       intros z Hafi. unfold extend.
       destruct (eq_id_dec y z)...
-      subst. rewrite neq_id... 
+      subst. rewrite neq_id...
   Case "ttrue".
-      assert (TBool <: S) 
+      assert (TBool <: S)
         by apply (typing_inversion_true _ _  Htypt)...
   Case "tfalse".
-      assert (TBool <: S) 
+      assert (TBool <: S)
         by apply (typing_inversion_false _ _  Htypt)...
   Case "tif".
-    assert ((extend Gamma x U) |- t1 \in TBool 
+    assert ((extend Gamma x U) |- t1 \in TBool
             /\ (extend Gamma x U) |- t2 \in S
-            /\ (extend Gamma x U) |- t3 \in S) 
+            /\ (extend Gamma x U) |- t3 \in S)
       by apply (typing_inversion_if _ _ _ _ _ Htypt).
     inversion H as [H1 [H2 H3]].
     apply IHt1 in H1. apply IHt2 in H2. apply IHt3 in H3.
     auto.
   Case "tunit".
-    assert (TUnit <: S) 
+    assert (TUnit <: S)
       by apply (typing_inversion_unit _ _  Htypt)...
 Qed.
 
@@ -1420,8 +1420,8 @@ Qed.
     empty.
 
      - If the final step of the derivation is by [T_App], then there
-       are terms [t1] and [t2] and types [T1] and [T2] such that 
-       [t = t1 t2], [T = T2], [empty |- t1 : T1 -> T2], and 
+       are terms [t1] and [t2] and types [T1] and [T2] such that
+       [t = t1 t2], [T = T2], [empty |- t1 : T1 -> T2], and
        [empty |- t2 : T1].
 
        By the definition of the step relation, there are three ways
@@ -1432,9 +1432,9 @@ Qed.
        Suppose instead [t1 t2] steps by [ST_AppAbs].  Then [t1 =
        \x:S.t12] for some type [S] and term [t12], and [t' =
        [x:=t2]t12].
-       
+
        By lemma [abs_arrow], we have [T1 <: S] and [x:S1 |- s2 : T2].
-       It then follows by the substitution lemma 
+       It then follows by the substitution lemma
        ([substitution_preserves_typing]) that [empty |- [x:=t2]
        t12 : T2] as desired.
 
@@ -1449,7 +1449,7 @@ Qed.
            - If [t ==> t'] by rule [ST_If], then [t' = if t1' then t2
              else t3] with [t1 ==> t1'].  By the induction hypothesis,
              [empty |- t1' : Bool], and so [empty |- t' : T] by [T_If].
-          
+
            - If [t ==> t'] by rule [ST_IfTrue] or [ST_IfFalse], then
              either [t' = t2] or [t' = t3], and [empty |- t' : T]
              follows by assumption.
@@ -1467,7 +1467,7 @@ Proof with eauto.
   intros t t' T HT.
   remember empty as Gamma. generalize dependent HeqGamma.
   generalize dependent t'.
-  has_type_cases (induction HT) Case; 
+  has_type_cases (induction HT) Case;
     intros t' HeqGamma HE; subst; inversion HE; subst...
   Case "T_App".
     inversion HE; subst...
@@ -1480,7 +1480,7 @@ Qed.
 
 (** This formalization of the STLC with subtyping has omitted record
     types, for brevity.  If we want to deal with them more seriously,
-    we have two choices.  
+    we have two choices.
 
     First, we can treat them as part of the core language, writing
     down proper syntax, typing, and subtyping rules for them.  Chapter
@@ -1548,7 +1548,7 @@ Qed.
                                S1->S2 <: T1->T2
 
 []
-*) 
+*)
 
 (* ###################################################################### *)
 (** * Exercise: Adding Products *)

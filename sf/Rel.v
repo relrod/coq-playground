@@ -49,21 +49,21 @@ Check le : relation nat.
     y1] and [R x y2] together imply [y1 = y2]. *)
 
 Definition partial_function {X: Type} (R: relation X) :=
-  forall x y1 y2 : X, R x y1 -> R x y2 -> y1 = y2. 
+  forall x y1 y2 : X, R x y1 -> R x y2 -> y1 = y2.
 
 (** For example, the [next_nat] relation defined in Logic.v is a
     partial function. *)
 
 (* Print next_nat.
 (* ====>
-Inductive next_nat (n : nat) : nat -> Prop := 
+Inductive next_nat (n : nat) : nat -> Prop :=
   nn : next_nat n (S n)
 *)
 Check next_nat : relation nat.
 
-Theorem next_nat_partial_function : 
+Theorem next_nat_partial_function :
    partial_function next_nat.
-Proof. 
+Proof.
   unfold partial_function.
   intros x y1 y2 H1 H2.
   inversion H1. inversion H2.
@@ -82,9 +82,9 @@ Proof.
   unfold not. unfold partial_function. intros Hc.
   assert (0 = 1) as Nonsense.
    Case "Proof of assertion".
-   apply Hc with (x := 0). 
-     apply le_n. 
-     apply le_S. apply le_n. 
+   apply Hc with (x := 0).
+     apply le_n.
+     apply le_S. apply le_n.
   inversion Nonsense.   Qed.
 
 (** **** Exercise: 2 stars, optional *)
@@ -109,7 +109,7 @@ Definition reflexive {X: Type} (R: relation X) :=
 
 Theorem le_reflexive :
   reflexive le.
-Proof. 
+Proof.
   unfold reflexive. intros n. apply le_n.  Qed.
 
 (** A relation [R] is _transitive_ if [R a c] holds whenever [R a b]
@@ -128,10 +128,10 @@ Proof.
 
 Theorem lt_trans:
   transitive lt.
-Proof. 
-  unfold lt. unfold transitive. 
+Proof.
+  unfold lt. unfold transitive.
   intros n m o Hnm Hmo.
-  apply le_S in Hnm. 
+  apply le_S in Hnm.
   apply le_trans with (a := (S n)) (b := (S m)) (c := o).
   apply Hnm.
   apply Hmo. Qed.
@@ -167,7 +167,7 @@ Proof.
     below)... *)
 
 Theorem le_Sn_le : forall n m, S n <= m -> n <= m.
-Proof. 
+Proof.
   intros n m H. apply le_trans with (S n).
     apply le_S. apply le_n.
     apply H.  Qed.
@@ -181,12 +181,12 @@ Proof.
 
 (** **** Exercise: 2 stars, optional (le_Sn_n_inf) *)
 (** Provide an informal proof of the following theorem:
- 
+
     Theorem: For every [n], [~(S n <= n)]
- 
+
     A formal proof of this is an optional exercise below, but try
     the informal proof without doing the formal proof first.
- 
+
     Proof:
     (* FILL IN HERE *)
     []
@@ -234,7 +234,7 @@ Theorem le_step : forall n m p,
   n < m ->
   m <= S p ->
   n <= p.
-Proof. 
+Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -260,10 +260,10 @@ Definition preorder {X:Type} (R: relation X) :=
 Theorem le_order :
   order le.
 Proof.
-  unfold order. split. 
+  unfold order. split.
     Case "refl". apply le_reflexive.
-    split. 
-      Case "antisym". apply le_antisymmetric. 
+    split.
+      Case "antisym". apply le_antisymmetric.
       Case "transitive.". apply le_trans.  Qed.
 
 (* ########################################################### *)
@@ -310,7 +310,7 @@ Proof.
     out that this definition is not very convenient for doing
     proofs -- the "nondeterminism" of the [rt_trans] rule can sometimes
     lead to tricky inductions.
- 
+
     Here is a more useful definition... *)
 
 Inductive refl_step_closure {X:Type} (R: relation X) : relation X :=
@@ -330,7 +330,7 @@ Inductive refl_step_closure {X:Type} (R: relation X) : relation X :=
 
 Tactic Notation "rt_cases" tactic(first) ident(c) :=
   first;
-  [ Case_aux c "rt_step" | Case_aux c "rt_refl" 
+  [ Case_aux c "rt_step" | Case_aux c "rt_refl"
   | Case_aux c "rt_trans" ].
 
 Tactic Notation "rsc_cases" tactic(first) ident(c) :=
@@ -341,10 +341,10 @@ Tactic Notation "rsc_cases" tactic(first) ident(c) :=
     the [rt_step] and [rt_trans] rules into the single rule step.
     The left-hand premise of this step is a single use of [R],
     leading to a much simpler induction principle.
- 
+
     Before we go on, we should check that the two definitions do
     indeed define the same relation...
-    
+
     First, we prove two lemmas showing that [refl_step_closure] mimics
     the behavior of the two "missing" [clos_refl_trans]
     constructors.  *)
@@ -370,7 +370,7 @@ Proof.
     relation. *)
 
 (** **** Exercise: 3 stars, optional (rtc_rsc_coincide) *)
-Theorem rtc_rsc_coincide : 
+Theorem rtc_rsc_coincide :
          forall (X:Type) (R: relation X) (x y : X),
   clos_refl_trans R x y <-> refl_step_closure R x y.
 Proof.

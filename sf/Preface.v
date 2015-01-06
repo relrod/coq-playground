@@ -47,7 +47,7 @@
     languages (e.g., object-oriented programming, aspect-oriented
     programming, functional programming), to mathematical techniques
     for specifying and reasoning about properties of software and
-    tools for helping validate these properties.  
+    tools for helping validate these properties.
 
     The present course is focused on this last set of techniques.  The
     text weaves together five conceptual threads:
@@ -88,7 +88,7 @@
     computer science.  Manna and Waldinger called it "the calculus of
     computer science," while Halpern et al.'s paper _On the Unusual
     Effectiveness of Logic in Computer Science_ catalogs scores of
-    ways in which logic offers critical tools and insights.  
+    ways in which logic offers critical tools and insights.
 
    In particular, the fundamental notion of inductive proofs is
    ubiquitous in all of computer science.  You have surely seen them
@@ -127,9 +127,9 @@
     proof development, including powerful tactics for constructing
     complex proofs semi-automatically, and a large library of common
     definitions and lemmas.
-    
+
     Coq has been a critical enabler for a huge variety of work across
-    computer science and mathematics.  
+    computer science and mathematics.
 
     - As a platform for the modeling of programming languages, it has
       become a standard tool for researchers who need to describe and
@@ -163,7 +163,7 @@
       correctness of the computational part.  More recently, an even
       more massive effort led to a Coq formalization of the
       Feit-Thompson Theorem -- the first major step in the
-      classification of finite simple groups. 
+      classification of finite simple groups.
 
    By the way, in case you're wondering about the name, here's what
    the official Coq web site says: "Some French computer scientists
@@ -182,7 +182,7 @@
     language and to a particular family of programming languages that are
     designed to emphasize these idioms, including Haskell, OCaml,
     Standard ML, F##, Scala, Scheme, Racket, Common Lisp, Clojure,
-    Erlang, and Coq.  
+    Erlang, and Coq.
 
     Functional programming has been developed by researchers over many
     decades -- indeed, its roots go back to Church's lambda-calculus,
@@ -245,7 +245,7 @@
     topics of critical importance to the enterprise of building
     reliable software (and hardware!): techniques for proving specific
     properties of particular _programs_ and for proving general
-    properties of whole programming _languages_.  
+    properties of whole programming _languages_.
 
     For both of these, the first thing we need is a way of
     representing programs as mathematical objects (so we can talk
@@ -266,7 +266,7 @@
     tiny toy language capturing the most fundamental features of
     conventional imperative languages: variables, assignment,
     conditionals, and loops. We study two different ways of reasoning
-    about the properties of Imp programs.  
+    about the properties of Imp programs.
 
     First, we consider what it means to say that two Imp programs are
     _equivalent_ in the sense that they give the same behaviors for
@@ -380,7 +380,7 @@
     of these notes (as a collection of Coq scripts and HTML files) is
     available here:
 <<
-        http://www.cis.upenn.edu/~bcpierce/sf   
+        http://www.cis.upenn.edu/~bcpierce/sf
 >>
     If you are using the notes as part of a class, you may be given
     access to a locally extended version of the files, which you
@@ -402,7 +402,7 @@
 (* ###################################################################### *)
 (** * Translations *)
 
-(** Thanks to the efforts of a team of volunteer translators, _Software 
+(** Thanks to the efforts of a team of volunteer translators, _Software
     Foundations_ can now be enjoyed in Japanese:
 
       - http://proofcafe.org/sf

@@ -17,7 +17,7 @@ Inductive ex (X:Type) (P : X->Prop) : Prop :=
     assertion "there exists an [x] for which the property [P] holds"
     we must actually name a _witness_ -- a specific value [x] -- and
     then give evidence for [P x], i.e., evidence that [x] has the
-    property [P]. 
+    property [P].
 
 *)
 
@@ -47,7 +47,7 @@ Notation "'exists' x : X , p" := (ex _ (fun x:X => p))
 
 Example exists_example_1 : exists n, n + (n * n) = 6.
 Proof.
-  apply ex_intro with (witness:=2). 
+  apply ex_intro with (witness:=2).
   reflexivity.  Qed.
 
 (** Note that we have to explicitly give the witness. *)
@@ -59,7 +59,7 @@ Proof.
 
 Example exists_example_1' : exists n, n + (n * n) = 6.
 Proof.
-  exists 2. 
+  exists 2.
   reflexivity.  Qed.
 
 (** *** *)
@@ -70,19 +70,19 @@ Proof.
     the hypothesis holds for the witness.  (If we don't
     explicitly choose one, Coq will just call it [witness], which
     makes proofs confusing.) *)
-  
+
 Theorem exists_example_2 : forall n,
   (exists m, n = 4 + m) ->
   (exists o, n = 2 + o).
 Proof.
   intros n H.
-  inversion H as [m Hm]. 
-  exists (2 + m).  
-  apply Hm.  Qed. 
+  inversion H as [m Hm].
+  exists (2 + m).
+  apply Hm.  Qed.
 
 
 (** Here is another example of how to work with existentials. *)
-Lemma exists_example_3 : 
+Lemma exists_example_3 :
   exists (n:nat), even n /\ beautiful n.
 Proof.
 (* WORKED IN CLASS *)
@@ -94,9 +94,9 @@ Proof.
 Qed.
 
 (** **** Exercise: 1 star, optional (english_exists) *)
-(** In English, what does the proposition 
+(** In English, what does the proposition
       ex nat (fun n => beautiful (S n))
-]] 
+]]
     mean? *)
 
 (* FILL IN HERE *)
@@ -109,7 +109,7 @@ Qed.
 
 Theorem dist_not_exists : forall (X:Type) (P : X -> Prop),
   (forall x, P x) -> ~ (exists x, ~ P x).
-Proof. 
+Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -142,19 +142,19 @@ Proof.
 [eq], which produces a [Prop], and
 the type-specific forms, like [beq_nat], that produce [boolean]
 values.  The former are more convenient to reason about, but
-we've relied on the latter to let us use equality tests 
+we've relied on the latter to let us use equality tests
 in _computations_.  While it is straightforward to write lemmas
 (e.g. [beq_nat_true] and [beq_nat_false]) that connect the two forms,
-using these lemmas quickly gets tedious. 
+using these lemmas quickly gets tedious.
 *)
 
 (** *** *)
-(** 
-It turns out that we can get the benefits of both forms at once 
+(**
+It turns out that we can get the benefits of both forms at once
 by using a construct called [sumbool]. *)
 
 Inductive sumbool (A B : Prop) : Set :=
- | left : A -> sumbool A B 
+ | left : A -> sumbool A B
  | right : B -> sumbool A B.
 
 Notation "{ A } + { B }" :=  (sumbool A B) : type_scope.
@@ -165,8 +165,8 @@ of truth or falsity. This means that when we [destruct] them, we
 are left with the relevant evidence as a hypothesis -- just as with [or].
 (In fact, the definition of [sumbool] is almost the same as for [or].
 The only difference is that values of [sumbool] are declared to be in
-[Set] rather than in [Prop]; this is a technical distinction 
-that allows us to compute with them.) *) 
+[Set] rather than in [Prop]; this is a technical distinction
+that allows us to compute with them.) *)
 
 (** *** *)
 
@@ -189,34 +189,34 @@ Proof.
     destruct m as [|m'].
     SCase "m = 0".
       right. intros contra. inversion contra.
-    SCase "m = S m'". 
+    SCase "m = S m'".
       destruct IHn' with (m := m') as [eq | neq].
       left. apply f_equal.  apply eq.
       right. intros Heq. inversion Heq as [Heq']. apply neq. apply Heq'.
-Defined. 
-  
+Defined.
+
 (** Read as a theorem, this says that equality on [nat]s is decidable:
-that is, given two [nat] values, we can always produce either 
+that is, given two [nat] values, we can always produce either
 evidence that they are equal or evidence that they are not.
 Read computationally, [eq_nat_dec] takes two [nat] values and returns
-a [sumbool] constructed with [left] if they are equal and [right] 
+a [sumbool] constructed with [left] if they are equal and [right]
 if they are not; this result can be tested with a [match] or, better,
-with an [if-then-else], just like a regular [boolean]. 
-(Notice that we ended this proof with [Defined] rather than [Qed]. 
+with an [if-then-else], just like a regular [boolean].
+(Notice that we ended this proof with [Defined] rather than [Qed].
 The only difference this makes is that the proof becomes _transparent_,
 meaning that its definition is available when Coq tries to do reductions,
 which is important for the computational interpretation.)
-*) 
+*)
 
 (** *** *)
-(** 
+(**
 Here's a simple example illustrating the advantages of the [sumbool] form. *)
 
 Definition override' {X: Type} (f: nat->X) (k:nat) (x:X) : nat->X:=
   fun (k':nat) => if eq_nat_dec k k' then x else f k'.
 
 Theorem override_same' : forall (X:Type) x1 k1 k2 (f : nat->X),
-  f k1 = x1 -> 
+  f k1 = x1 ->
   (override' f k1 x1) k2 = f k2.
 Proof.
   intros X x1 k1 k2 f. intros Hx1.
@@ -225,10 +225,10 @@ Proof.
   Case "k1 = k2".
     rewrite <- e.
     symmetry. apply Hx1.
-  Case "k1 <> k2". 
+  Case "k1 <> k2".
     reflexivity.  Qed.
 
-(** Compare this to the more laborious proof (in MoreCoq.v) for the 
+(** Compare this to the more laborious proof (in MoreCoq.v) for the
    version of [override] defined using [beq_nat], where we had to
    use the auxiliary lemma [beq_nat_true] to convert a fact about booleans
    to a Prop. *)
@@ -268,7 +268,7 @@ Fixpoint forallb {X : Type} (test : X -> bool) (l : list X) : bool :=
   end.
 
 (** Using the property [all], write down a specification for [forallb],
-    and prove that it satisfies the specification. Try to make your 
+    and prove that it satisfies the specification. Try to make your
     specification as precise as possible.
 
     Are there any important properties of the function [forallb] which
@@ -291,7 +291,7 @@ Fixpoint forallb {X : Type} (test : X -> bool) (l : list X) : bool :=
 
     A list [l] is an "in-order merge" of [l1] and [l2] if it contains
     all the same elements as [l1] and [l2], in the same order as [l1]
-    and [l2], but possibly interleaved.  For example, 
+    and [l2], but possibly interleaved.  For example,
     [1,4,6,2,3]
     is an in-order merge of
     [1,6,2]
@@ -322,17 +322,17 @@ Inductive appears_in {X:Type} (a:X) : list X -> Prop :=
   | ai_later : forall b l, appears_in a l -> appears_in a (b::l).
 
 (** ...gives us a precise way of saying that a value [a] appears at
-    least once as a member of a list [l]. 
+    least once as a member of a list [l].
 
     Here's a pair of warm-ups about [appears_in].
 *)
 
-Lemma appears_in_app : forall (X:Type) (xs ys : list X) (x:X), 
+Lemma appears_in_app : forall (X:Type) (xs ys : list X) (x:X),
      appears_in x (xs ++ ys) -> appears_in x xs \/ appears_in x ys.
 Proof.
   (* FILL IN HERE *) Admitted.
 
-Lemma app_appears_in : forall (X:Type) (xs ys : list X) (x:X), 
+Lemma app_appears_in : forall (X:Type) (xs ys : list X) (x:X),
      appears_in x xs \/ appears_in x ys -> appears_in x (xs ++ ys).
 Proof.
   (* FILL IN HERE *) Admitted.
@@ -380,7 +380,7 @@ Inductive nostutter:  list nat -> Prop :=
     to change the proof if the given one doesn't work for you.
     Your definition might be different from mine and still correct,
     in which case the examples might need a different proof.
-   
+
     The suggested proofs for the examples (in comments) use a number
     of tactics we haven't talked about, to try to make them robust
     with respect to different possible ways of defining [nostutter].
@@ -390,28 +390,28 @@ Inductive nostutter:  list nat -> Prop :=
 
 Example test_nostutter_1:      nostutter [3;1;4;1;5;6].
 (* FILL IN HERE *) Admitted.
-(* 
+(*
   Proof. repeat constructor; apply beq_nat_false; auto. Qed.
 *)
 
 Example test_nostutter_2:  nostutter [].
 (* FILL IN HERE *) Admitted.
-(* 
+(*
   Proof. repeat constructor; apply beq_nat_false; auto. Qed.
 *)
 
 Example test_nostutter_3:  nostutter [5].
 (* FILL IN HERE *) Admitted.
-(* 
+(*
   Proof. repeat constructor; apply beq_nat_false; auto. Qed.
 *)
 
 Example test_nostutter_4:      not (nostutter [3;1;1;4]).
 (* FILL IN HERE *) Admitted.
-(* 
+(*
   Proof. intro.
-  repeat match goal with 
-    h: nostutter _ |- _ => inversion h; clear h; subst 
+  repeat match goal with
+    h: nostutter _ |- _ => inversion h; clear h; subst
   end.
   contradiction H1; auto. Qed.
 *)
@@ -419,7 +419,7 @@ Example test_nostutter_4:      not (nostutter [3;1;1;4]).
 
 (** **** Exercise: 4 stars, advanced (pigeonhole principle) *)
 (** The "pigeonhole principle" states a basic fact about counting:
-   if you distribute more than [n] items into [n] pigeonholes, some 
+   if you distribute more than [n] items into [n] pigeonholes, some
    pigeonhole must contain at least two items.  As is often the case,
    this apparently trivial fact about numbers requires non-trivial
    machinery to prove, but we now have enough... *)
@@ -428,12 +428,12 @@ Example test_nostutter_4:      not (nostutter [3;1;1;4]).
     of naturals, but not for arbitrary lists). *)
 
 Lemma app_length : forall (X:Type) (l1 l2 : list X),
-  length (l1 ++ l2) = length l1 + length l2. 
-Proof. 
+  length (l1 ++ l2) = length l1 + length l2.
+Proof.
   (* FILL IN HERE *) Admitted.
 
 Lemma appears_in_app_split : forall (X:Type) (x:X) (l:list X),
-  appears_in x l -> 
+  appears_in x l ->
   exists l1, exists l2, l = l1 ++ (x::l2).
 Proof.
   (* FILL IN HERE *) Admitted.
@@ -457,11 +457,11 @@ Inductive repeats {X:Type} : list X -> Prop :=
     [appears_in] is decidable; if you can manage to do this, you will
     not need the [excluded_middle] hypothesis. *)
 
-Theorem pigeonhole_principle: forall (X:Type) (l1  l2:list X), 
-   excluded_middle -> 
-   (forall x, appears_in x l1 -> appears_in x l2) -> 
-   length l2 < length l1 -> 
-   repeats l1.  
+Theorem pigeonhole_principle: forall (X:Type) (l1  l2:list X),
+   excluded_middle ->
+   (forall x, appears_in x l1 -> appears_in x l2) ->
+   length l2 < length l1 ->
+   repeats l1.
 Proof.
    intros X l1. induction l1 as [|x l1'].
   (* FILL IN HERE *) Admitted.

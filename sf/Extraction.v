@@ -71,7 +71,7 @@ Extraction "imp2.ml" ceval_step.
 
 (** To use our extracted evaluator to run Imp programs, all we need to
     add is a tiny driver program that calls the evaluator and somehow
-    prints out the result.  
+    prints out the result.
 
     For simplicity, we'll print results by dumping out the first four
     memory locations in the final state.

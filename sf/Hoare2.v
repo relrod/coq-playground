@@ -34,7 +34,7 @@ Require Export Hoare.
         {{ Z - X = p - m }}
     END;
       {{ Z - X = p - m /\ ~ (X <> 0) }} ->>
-      {{ Z = p - m }} 
+      {{ Z = p - m }}
 *)
 
 (** Concretely, a decorated program consists of the program text
@@ -470,7 +470,7 @@ Proof.
 
     This failure is not very surprising: the variable [Y] changes
     during the loop, while [m] and [n] are constant, so the assertion
-    we chose didn't have much chance of being an invariant!  
+    we chose didn't have much chance of being an invariant!
 
     To do better, we need to generalize (8) to some statement that is
     equivalent to (8) when [X] is [0], since this will be the case
@@ -661,7 +661,7 @@ Proof.
     Also, looking at the second conjunct of (8), it seems quite
     hopeless as an invariant -- and we don't even need it, since we
     can obtain it from the negation of the guard (third conjunct
-    in (7)), again under the assumption that [X=m].  
+    in (7)), again under the assumption that [X=m].
 
     So we now try [X=m /\ Z*Z <= m] as the loop invariant:
       {{ X=m }}  ->>                                      (a - OK)
@@ -1371,7 +1371,7 @@ Proof. intros m p. verify. (* this grinds for a bit! *) Qed.
 (** In the [slow_assignment] exercise above, we saw a roundabout way
     of assigning a number currently stored in [X] to the variable [Y]:
     start [Y] at [0], then decrement [X] until it hits [0],
-    incrementing [Y] at each step. 
+    incrementing [Y] at each step.
 
     Write a _formal_ version of this decorated program and prove it
     correct. *)

@@ -9,7 +9,7 @@ Require Export Imp.
     "big-step" style -- they specify how a given expression can be
     evaluated to its final value (or a command plus a store to a final
     store) "all in one big step."
- 
+
     This style is simple and natural for many purposes -- indeed,
     Gilles Kahn, who popularized its use, called it _natural
     semantics_.  But there are some things it does not do well.  In
@@ -50,7 +50,7 @@ Require Export Imp.
     the program tries to do an operation that makes no sense, such as
     adding a number to a list, and none of the evaluation rules can be
     applied.
- 
+
     These two outcomes -- nontermination vs. getting stuck in an
     erroneous configuration -- are quite different.  In particular, we
     want to allow the first (permitting the possibility of infinite
@@ -61,7 +61,7 @@ Require Export Imp.
     topic for the rest of the course.  As a first step, we need a
     different way of presenting the semantics that allows us to
     distinguish nontermination from erroneous "stuck states."
- 
+
     So, for lots of reasons, we'd like to have a finer-grained way of
     defining and reasoning about program behaviors.  This is the topic
     of the present chapter.  We replace the "big-step" [eval] relation
@@ -98,7 +98,7 @@ Fixpoint evalF (t : tm) : nat :=
 (** Now, here is the same evaluator, written in exactly the same
     style, but formulated as an inductively defined relation.  Again,
     we use the notation [t || n] for "[t] evaluates to [n]." *)
-(** 
+(**
                                --------                                (E_Const)
                                C n || n
 
@@ -108,13 +108,13 @@ Fixpoint evalF (t : tm) : nat :=
                         P t1 t2 || C (n1 + n2)
 *)
 
-Reserved Notation " t '||' n " (at level 50, left associativity). 
+Reserved Notation " t '||' n " (at level 50, left associativity).
 
 Inductive eval : tm -> nat -> Prop :=
   | E_Const : forall n,
       C n || n
-  | E_Plus : forall t1 t2 n1 n2, 
-      t1 || n1 -> 
+  | E_Plus : forall t1 t2 n1 n2,
+      t1 || n1 ->
       t2 || n2 ->
       P t1 t2 || (n1 + n2)
 
@@ -127,7 +127,7 @@ Tactic Notation "eval_cases" tactic(first) ident(c) :=
 Module SimpleArith1.
 
 (** Now, here is a small-step version. *)
-(** 
+(**
                      -------------------------------        (ST_PlusConstConst)
                      P (C n1) (C n2) ==> C (n1 + n2)
 
@@ -151,7 +151,7 @@ Inductive step : tm -> tm -> Prop :=
       t1 ==> t1' ->
       P t1 t2 ==> P t1' t2
   | ST_Plus2 : forall n1 t2 t2',
-      t2 ==> t2' -> 
+      t2 ==> t2' ->
       P (C n1) t2 ==> P (C n1) t2'
 
   where " t '==>' t' " := (step t t').
@@ -162,7 +162,7 @@ Tactic Notation "step_cases" tactic(first) ident(c) :=
   | Case_aux c "ST_Plus1" | Case_aux c "ST_Plus2" ].
 
 (** Things to notice:
- 
+
     - We are defining just a single reduction step, in which
       one [P] node is replaced by its value.
 
@@ -180,12 +180,12 @@ Tactic Notation "step_cases" tactic(first) ident(c) :=
 (** If [t1] can take a step to [t1'], then [P t1 t2] steps
     to [P t1' t2]: *)
 
-Example test_step_1 : 
-      P 
+Example test_step_1 :
+      P
         (P (C 0) (C 3))
         (P (C 2) (C 4))
       ==>
-      P 
+      P
         (C (0 + 3))
         (P (C 2) (C 4)).
 Proof.
@@ -197,19 +197,19 @@ Proof.
     then [P (C n) t2] steps to [P (C n)
     t2']: *)
 
-Example test_step_2 : 
-      P 
+Example test_step_2 :
+      P
         (C 0)
-        (P 
-          (C 2) 
+        (P
+          (C 2)
           (P (C 0) (C 3)))
       ==>
-      P 
+      P
         (C 0)
-        (P 
-          (C 2) 
+        (P
+          (C 2)
           (C (0 + 3))).
-Proof. 
+Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -254,7 +254,7 @@ Definition relation (X: Type) := X->X->Prop.
       - If both are [ST_PlusConstConst], the result is immediate.
 
       - The cases when both derivations end with [ST_Plus1] or
-        [ST_Plus2] follow by the induction hypothesis.  
+        [ST_Plus2] follow by the induction hypothesis.
 
       - It cannot happen that one is [ST_PlusConstConst] and the other
         is [ST_Plus1] or [ST_Plus2], since this would imply that [x] has
@@ -268,7 +268,7 @@ Definition relation (X: Type) := X->X->Prop.
         the form [C n]. [] *)
 
 Definition deterministic {X: Type} (R: relation X) :=
-  forall x y1 y2 : X, R x y1 -> R x y2 -> y1 = y2. 
+  forall x y1 y2 : X, R x y1 -> R x y2 -> y1 = y2.
 
 Theorem step_deterministic:
   deterministic step.
@@ -335,7 +335,7 @@ Inductive value : tm -> Prop :=
     definition of the [==>] relation to write [ST_Plus2] rule in a
     slightly more elegant way: *)
 
-(** 
+(**
                      -------------------------------        (ST_PlusConstConst)
                      P (C n1) (C n2) ==> C (n1 + n2)
 
@@ -368,7 +368,7 @@ Inductive step : tm -> tm -> Prop :=
         t1 ==> t1' ->
         P t1 t2 ==> P t1' t2
   | ST_Plus2 : forall v1 t2 t2',
-        value v1 ->                     (* <----- n.b. *) 
+        value v1 ->                     (* <----- n.b. *)
         t2 ==> t2' ->
         P v1 t2 ==> P v1 t2'
 
@@ -380,7 +380,7 @@ Tactic Notation "step_cases" tactic(first) ident(c) :=
   | Case_aux c "ST_Plus1" | Case_aux c "ST_Plus2" ].
 
 (** **** Exercise: 3 stars (redo_determinism) *)
-(** As a sanity check on this change, let's re-verify determinism 
+(** As a sanity check on this change, let's re-verify determinism
 
     Proof sketch: We must show that if [x] steps to both [y1] and [y2]
     then [y1] and [y2] are equal.  Consider the final rules used in
@@ -444,7 +444,7 @@ Proof.
 
 Theorem strong_progress : forall t,
   value t \/ (exists t', t ==> t').
-Proof.  
+Proof.
   tm_cases (induction t) Case.
     Case "C". left. apply v_const.
     Case "P". right. inversion IHt1.
@@ -455,7 +455,7 @@ Proof.
         SSCase "r". inversion H0 as [t' H1].
           exists (P t1 t').
           apply ST_Plus2. apply H. apply H1.
-      SCase "r". inversion H as [t' H0]. 
+      SCase "r". inversion H as [t' H0].
           exists (P t' t2).
           apply ST_Plus1. apply H0.  Qed.
 
@@ -467,7 +467,7 @@ Proof.
 
 (** The idea of "making progress" can be extended to tell us something
     interesting about [value]s: in this language [value]s are exactly
-    the terms that _cannot_ make progress in this sense.  
+    the terms that _cannot_ make progress in this sense.
 
     To state this observation formally, let's begin by giving a name
     to terms that cannot make progress.  We'll call them _normal
@@ -509,28 +509,28 @@ Corollary nf_same_as_value : forall t,
 Proof.
   split. apply nf_is_value. apply value_is_nf. Qed.
 
-(** Why is this interesting?  
+(** Why is this interesting?
 
     Because [value] is a syntactic concept -- it is defined by looking
     at the form of a term -- while [normal_form] is a semantic one --
     it is defined by looking at how the term steps.  It is not obvious
     that these concepts should coincide!
- 
+
     Indeed, we could easily have written the definitions so that they
     would not coincide... *)
- 
+
 (* ##################################################### *)
 
 (** We might, for example, mistakenly define [value] so that it
     includes some terms that are not finished reducing. *)
 
-Module Temp1. 
+Module Temp1.
 (* Open an inner module so we can redefine value and step. *)
 
 Inductive value : tm -> Prop :=
 | v_const : forall n, value (C n)
 | v_funny : forall t1 n2,                       (* <---- *)
-              value (P t1 (C n2)).  
+              value (P t1 (C n2)).
 
 Reserved Notation " t '==>' t' " (at level 40).
 
@@ -659,7 +659,7 @@ Inductive step : tm -> tm -> Prop :=
 
   where " t '==>' t' " := (step t t').
 
-(** **** Exercise: 1 star (smallstep_bools) *) 
+(** **** Exercise: 1 star (smallstep_bools) *)
 (** Which of the following propositions are provable?  (This is just a
     thought exercise, but for an extra challenge feel free to prove
     your answers in Coq.) *)
@@ -674,7 +674,7 @@ Definition bool_step_prop2 :=
        ttrue
        (tif ttrue ttrue ttrue)
        (tif tfalse tfalse tfalse)
-  ==> 
+  ==>
      ttrue.
 
 (* FILL IN HERE *)
@@ -684,7 +684,7 @@ Definition bool_step_prop3 :=
        (tif ttrue ttrue ttrue)
        (tif ttrue ttrue ttrue)
        tfalse
-   ==> 
+   ==>
      tif
        ttrue
        (tif ttrue ttrue ttrue)
@@ -699,7 +699,7 @@ Definition bool_step_prop3 :=
 
 Theorem strong_progress : forall t,
   value t \/ (exists t', t ==> t').
-Proof.  
+Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -710,21 +710,21 @@ Proof.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
-Module Temp5. 
+Module Temp5.
 
-(** **** Exercise: 2 stars (smallstep_bool_shortcut) *) 
+(** **** Exercise: 2 stars (smallstep_bool_shortcut) *)
 (** Suppose we want to add a "short circuit" to the step relation for
     boolean expressions, so that it can recognize when the [then] and
     [else] branches of a conditional are the same value (either
     [ttrue] or [tfalse]) and reduce the whole conditional to this
     value in a single step, even if the guard has not yet been reduced
     to a value. For example, we would like this proposition to be
-    provable: 
+    provable:
          tif
             (tif ttrue ttrue ttrue)
             tfalse
             tfalse
-     ==> 
+     ==>
          tfalse.
 *)
 
@@ -751,10 +751,10 @@ Definition bool_step_prop4 :=
             (tif ttrue ttrue ttrue)
             tfalse
             tfalse
-     ==> 
+     ==>
          tfalse.
 
-Example bool_step_prop4_holds : 
+Example bool_step_prop4_holds :
   bool_step_prop4.
 Proof.
   (* FILL IN HERE *) Admitted.
@@ -799,7 +799,7 @@ End Temp4.
 
 (** Until now, we've been working with the _single-step reduction_
     relation [==>], which formalizes the individual steps of an
-    _abstract machine_ for executing programs.  
+    _abstract machine_ for executing programs.
 
     We can also use this machine to reduce programs to completion --
     to find out what final result they yield.  This can be formalized
@@ -816,7 +816,7 @@ End Temp4.
 
 (** Since we'll want to reuse the idea of multi-step reduction many
     times in this and future chapters, let's take a little extra
-    trouble here and define it generically.  
+    trouble here and define it generically.
 
     Given a relation [R], we define a relation [multi R], called the
     _multi-step closure of [R]_ as follows: *)
@@ -829,7 +829,7 @@ Inductive multi {X:Type} (R: relation X) : relation X :=
                     multi R x z.
 
 (** The effect of this definition is that [multi R] relates two
-    elements [x] and [y] if either 
+    elements [x] and [y] if either
 
        - [x = y], or else
        - there is some sequence [z1], [z2], ..., [zn]
@@ -884,8 +884,8 @@ Proof.
   intros X R x y z G H.
   multi_cases (induction G) Case.
     Case "multi_refl". assumption.
-    Case "multi_step". 
-      apply multi_step with y. assumption. 
+    Case "multi_step".
+      apply multi_step with y. assumption.
       apply IHG. assumption.  Qed.
 
 (** That is, if [t1==>*t2] and [t2==>*t3], then [t1==>*t3]. *)
@@ -897,10 +897,10 @@ Lemma test_multistep_1:
       P
         (P (C 0) (C 3))
         (P (C 2) (C 4))
-   ==>* 
+   ==>*
       C ((0 + 3) + (2 + 4)).
 Proof.
-  apply multi_step with 
+  apply multi_step with
             (P
                 (C (0 + 3))
                 (P (C 2) (C 4))).
@@ -909,9 +909,9 @@ Proof.
             (P
                 (C (0 + 3))
                 (C (2 + 4))).
-  apply ST_Plus2. apply v_const. 
-  apply ST_PlusConstConst. 
-  apply multi_R. 
+  apply ST_Plus2. apply v_const.
+  apply ST_PlusConstConst.
+  apply multi_R.
   apply ST_PlusConstConst. Qed.
 
 (** Here's an alternate proof that uses [eapply] to avoid explicitly
@@ -925,7 +925,7 @@ Lemma test_multistep_1':
       C ((0 + 3) + (2 + 4)).
 Proof.
   eapply multi_step. apply ST_Plus1. apply ST_PlusConstConst.
-  eapply multi_step. apply ST_Plus2. apply v_const. 
+  eapply multi_step. apply ST_Plus2. apply v_const.
   apply ST_PlusConstConst.
   eapply multi_step. apply ST_PlusConstConst.
   apply multi_refl.  Qed.
@@ -984,12 +984,12 @@ Theorem normal_forms_unique:
   deterministic normal_form_of.
 Proof.
   unfold deterministic. unfold normal_form_of.  intros x y1 y2 P1 P2.
-  inversion P1 as [P11 P12]; clear P1. inversion P2 as [P21 P22]; clear P2. 
-  generalize dependent y2. 
+  inversion P1 as [P11 P12]; clear P1. inversion P2 as [P21 P22]; clear P2.
+  generalize dependent y2.
   (* We recommend using this initial setup as-is! *)
   (* FILL IN HERE *) Admitted.
 (** [] *)
-  
+
 (** Indeed, something stronger is true for this language (though not
     for all languages): the reduction of _any_ term [t] will
     eventually reach a normal form -- i.e., [normal_form_of] is a
@@ -1013,9 +1013,9 @@ Lemma multistep_congr_1 : forall t1 t1' t2,
      P t1 t2 ==>* P t1' t2.
 Proof.
   intros t1 t1' t2 H. multi_cases (induction H) Case.
-    Case "multi_refl". apply multi_refl. 
-    Case "multi_step". apply multi_step with (P y t2). 
-        apply ST_Plus1. apply H. 
+    Case "multi_refl". apply multi_refl.
+    Case "multi_step". apply multi_step with (P y t2).
+        apply ST_Plus1. apply H.
         apply IHmulti.  Qed.
 
 (** **** Exercise: 2 stars (multistep_congr_2) *)
@@ -1039,7 +1039,7 @@ Proof.
       reflexivity and the right-hand side by observing (a) that values
       are normal forms (by [nf_same_as_value]) and (b) that [t] is a
       value (by [v_const]).
-      
+
     - [t = P t1 t2] for some [t1] and [t2].  By the IH, [t1] and
       [t2] have normal forms [t1'] and [t2'].  Recall that normal
       forms are values (by [nf_same_as_value]); we know that [t1' =
@@ -1055,11 +1055,11 @@ Theorem step_normalizing :
 Proof.
   unfold normalizing.
   tm_cases (induction t) Case.
-    Case "C". 
-      exists (C n). 
+    Case "C".
+      exists (C n).
       split.
-      SCase "l". apply multi_refl. 
-      SCase "r". 
+      SCase "l". apply multi_refl.
+      SCase "r".
         (* We can use [rewrite] with "iff" statements, not
            just equalities: *)
         rewrite nf_same_as_value. apply v_const.
@@ -1067,19 +1067,19 @@ Proof.
       inversion IHt1 as [t1' H1]; clear IHt1. inversion IHt2 as [t2' H2]; clear IHt2.
       inversion H1 as [H11 H12]; clear H1. inversion H2 as [H21 H22]; clear H2.
       rewrite nf_same_as_value in H12. rewrite nf_same_as_value in H22.
-      inversion H12 as [n1]. inversion H22 as [n2]. 
-      rewrite <- H in H11. 
+      inversion H12 as [n1]. inversion H22 as [n2].
+      rewrite <- H in H11.
       rewrite <- H0 in H21.
       exists (C (n1 + n2)).
       split.
-        SCase "l". 
+        SCase "l".
           apply multi_trans with (P (C n1) t2).
           apply multistep_congr_1. apply H11.
-          apply multi_trans with 
+          apply multi_trans with
              (P (C n1) (C n2)).
           apply multistep_congr_2. apply v_const. apply H21.
           apply multi_R. apply ST_PlusConstConst.
-        SCase "r". 
+        SCase "r".
           rewrite nf_same_as_value. apply v_const.  Qed.
 
 (* ########################################################### *)
@@ -1096,16 +1096,16 @@ Theorem eval__multistep : forall t n,
   t || n -> t ==>* C n.
 
 (** The key idea behind the proof comes from the following picture:
-       P t1 t2 ==>            (by ST_Plus1) 
-       P t1' t2 ==>           (by ST_Plus1)  
-       P t1'' t2 ==>          (by ST_Plus1) 
-       ...                
+       P t1 t2 ==>            (by ST_Plus1)
+       P t1' t2 ==>           (by ST_Plus1)
+       P t1'' t2 ==>          (by ST_Plus1)
+       ...
        P (C n1) t2 ==>        (by ST_Plus2)
        P (C n1) t2' ==>       (by ST_Plus2)
        P (C n1) t2'' ==>      (by ST_Plus2)
-       ...                
+       ...
        P (C n1) (C n2) ==>    (by ST_PlusConstConst)
-       C (n1 + n2)              
+       C (n1 + n2)
     That is, the multistep reduction of a term of the form [P t1 t2]
     proceeds in three phases:
        - First, we use [ST_Plus1] some number of times to reduce [t1]
@@ -1147,7 +1147,7 @@ Proof.
 (** [] *)
 
 (** The fact that small-step reduction implies big-step is now
-    straightforward to prove, once it is stated correctly. 
+    straightforward to prove, once it is stated correctly.
 
     The proof proceeds by induction on the multi-step reduction
     sequence that is buried in the hypothesis [normal_form_of t t']. *)
@@ -1168,7 +1168,7 @@ Proof.
 (** Remember that we also defined big-step evaluation of [tm]s as a
     function [evalF].  Prove that it is equivalent to the existing
     semantics.
- 
+
     Hint: we just proved that [eval] and [multistep] are
     equivalent, so logically it doesn't matter which you choose.
     One will be easier than the other, though!  *)
@@ -1211,7 +1211,7 @@ Inductive step : tm -> tm -> Prop :=
       t1 ==> t1' ->
       P t1 t2 ==> P t1' t2
   | ST_Plus2 : forall v1 t2 t2',
-      value v1 ->     
+      value v1 ->
       t2 ==> t2' ->
       P v1 t2 ==> P v1 t2'
   | ST_IfTrue : forall t1 t2,
@@ -1268,7 +1268,7 @@ Inductive aval : aexp -> Prop :=
 Reserved Notation " t '/' st '==>a' t' " (at level 40, st at level 39).
 
 Inductive astep : state -> aexp -> aexp -> Prop :=
-  | AS_Id : forall st i, 
+  | AS_Id : forall st i,
       AId i / st ==>a ANum (st i)
   | AS_Plus : forall st n1 n2,
       APlus (ANum n1) (ANum n2) / st ==>a ANum (n1 + n2)
@@ -1304,17 +1304,17 @@ Inductive astep : state -> aexp -> aexp -> Prop :=
 
   Inductive bstep : state -> bexp -> bexp -> Prop :=
   | BS_Eq : forall st n1 n2,
-      (BEq (ANum n1) (ANum n2)) / st ==>b 
+      (BEq (ANum n1) (ANum n2)) / st ==>b
       (if (beq_nat n1 n2) then BTrue else BFalse)
   | BS_Eq1 : forall st a1 a1' a2,
       a1 / st ==>a a1' ->
       (BEq a1 a2) / st ==>b (BEq a1' a2)
   | BS_Eq2 : forall st v1 a2 a2',
-      aval v1 -> 
+      aval v1 ->
       a2 / st ==>a a2' ->
       (BEq v1 a2) / st ==>b (BEq v1 a2')
   | BS_LtEq : forall st n1 n2,
-      (BLe (ANum n1) (ANum n2)) / st ==>b 
+      (BLe (ANum n1) (ANum n2)) / st ==>b
                (if (ble_nat n1 n2) then BTrue else BFalse)
   | BS_LtEq1 : forall st a1 a1' a2,
       a1 / st ==>a a1' ->
@@ -1349,7 +1349,7 @@ Inductive astep : state -> aexp -> aexp -> Prop :=
     small tricks to make it work:
 
        - We use [SKIP] as a "command value" -- i.e., a command that
-         has reached a normal form.  
+         has reached a normal form.
 
             - An assignment command reduces to [SKIP] (and an updated
               state).
@@ -1367,14 +1367,14 @@ Inductive astep : state -> aexp -> aexp -> Prop :=
    command needs to be saved somewhere while a single copy of the loop
    body is being evaluated.) *)
 
-Reserved Notation " t '/' st '==>' t' '/' st' " 
+Reserved Notation " t '/' st '==>' t' '/' st' "
                   (at level 40, st at level 39, t' at level 39).
 
 Inductive cstep : (com * state) -> (com * state) -> Prop :=
   | CS_AssStep : forall st i a a',
       a / st ==>a a' ->
-      (i ::= a) / st ==> (i ::= a') / st 
-  | CS_Ass : forall st i n, 
+      (i ::= a) / st ==> (i ::= a') / st
+  | CS_Ass : forall st i n,
       (i ::= (ANum n)) / st ==> SKIP / (update st i n)
   | CS_SeqStep : forall st c1 c1' st' c2,
       c1 / st ==> c1' / st' ->
@@ -1421,25 +1421,25 @@ Tactic Notation "com_cases" tactic(first) ident(c) :=
   [ Case_aux c "SKIP" | Case_aux c "::=" | Case_aux c ";"
   | Case_aux c "IFB" | Case_aux c "WHILE" | Case_aux c "PAR" ].
 
-Notation "'SKIP'" := 
+Notation "'SKIP'" :=
   CSkip.
-Notation "x '::=' a" := 
+Notation "x '::=' a" :=
   (CAss x a) (at level 60).
-Notation "c1 ;; c2" := 
+Notation "c1 ;; c2" :=
   (CSeq c1 c2) (at level 80, right associativity).
-Notation "'WHILE' b 'DO' c 'END'" := 
+Notation "'WHILE' b 'DO' c 'END'" :=
   (CWhile b c) (at level 80, right associativity).
-Notation "'IFB' b 'THEN' c1 'ELSE' c2 'FI'" := 
+Notation "'IFB' b 'THEN' c1 'ELSE' c2 'FI'" :=
   (CIf b c1 c2) (at level 80, right associativity).
-Notation "'PAR' c1 'WITH' c2 'END'" := 
+Notation "'PAR' c1 'WITH' c2 'END'" :=
   (CPar c1 c2) (at level 80, right associativity).
 
 Inductive cstep : (com * state)  -> (com * state) -> Prop :=
     (* Old part *)
   | CS_AssStep : forall st i a a',
-      a / st ==>a a' -> 
+      a / st ==>a a' ->
       (i ::= a) / st ==> (i ::= a') / st
-  | CS_Ass : forall st i n, 
+  | CS_Ass : forall st i n,
       (i ::= (ANum n)) / st ==> SKIP / (update st i n)
   | CS_SeqStep : forall st c1 c1' st' c2,
       c1 / st ==> c1' / st' ->
@@ -1451,14 +1451,14 @@ Inductive cstep : (com * state)  -> (com * state) -> Prop :=
   | CS_IfFalse : forall st c1 c2,
       (IFB BFalse THEN c1 ELSE c2 FI) / st ==> c2 / st
   | CS_IfStep : forall st b b' c1 c2,
-      b /st ==>b b' -> 
+      b /st ==>b b' ->
       (IFB b THEN c1 ELSE c2 FI) / st ==> (IFB b' THEN c1 ELSE c2 FI) / st
   | CS_While : forall st b c1,
-      (WHILE b DO c1 END) / st ==> 
+      (WHILE b DO c1 END) / st ==>
                (IFB b THEN (c1;; (WHILE b DO c1 END)) ELSE SKIP FI) / st
     (* New part: *)
   | CS_Par1 : forall st c1 c1' c2 st',
-      c1 / st ==> c1' / st' -> 
+      c1 / st ==> c1' / st' ->
       (PAR c1 WITH c2 END) / st ==> (PAR c1' WITH c2 END) / st'
   | CS_Par2 : forall st c1 c2 c2' st',
       c2 / st ==> c2' / st' ->
@@ -1468,11 +1468,11 @@ Inductive cstep : (com * state)  -> (com * state) -> Prop :=
   where " t '/' st '==>' t' '/' st' " := (cstep (t,st) (t',st')).
 
 
-Definition cmultistep := multi cstep. 
+Definition cmultistep := multi cstep.
 
-Notation " t '/' st '==>*' t' '/' st' " := 
-   (multi cstep  (t,st) (t',st')) 
-   (at level 40, st at level 39, t' at level 39).  
+Notation " t '/' st '==>*' t' '/' st' " :=
+   (multi cstep  (t,st) (t',st'))
+   (at level 40, st at level 39, t' at level 39).
 
 
 
@@ -1500,16 +1500,16 @@ Example par_loop_example_0:
 Proof.
   eapply ex_intro. split.
   unfold par_loop.
-  eapply multi_step. apply CS_Par1. 
+  eapply multi_step. apply CS_Par1.
     apply CS_Ass.
   eapply multi_step. apply CS_Par2. apply CS_While.
-  eapply multi_step. apply CS_Par2. apply CS_IfStep. 
+  eapply multi_step. apply CS_Par2. apply CS_IfStep.
     apply BS_Eq1. apply AS_Id.
-  eapply multi_step. apply CS_Par2. apply CS_IfStep. 
-    apply BS_Eq. simpl. 
-  eapply multi_step. apply CS_Par2. apply CS_IfFalse. 
-  eapply multi_step. apply CS_ParDone. 
-  eapply multi_refl. 
+  eapply multi_step. apply CS_Par2. apply CS_IfStep.
+    apply BS_Eq. simpl.
+  eapply multi_step. apply CS_Par2. apply CS_IfFalse.
+  eapply multi_step. apply CS_ParDone.
+  eapply multi_refl.
   reflexivity. Qed.
 
 (** It can also terminate with [X] set to [2]: *)
@@ -1521,43 +1521,43 @@ Example par_loop_example_2:
 Proof.
   eapply ex_intro. split.
   eapply multi_step. apply CS_Par2. apply CS_While.
-  eapply multi_step. apply CS_Par2. apply CS_IfStep. 
+  eapply multi_step. apply CS_Par2. apply CS_IfStep.
     apply BS_Eq1. apply AS_Id.
-  eapply multi_step. apply CS_Par2. apply CS_IfStep. 
-    apply BS_Eq. simpl. 
-  eapply multi_step. apply CS_Par2. apply CS_IfTrue. 
+  eapply multi_step. apply CS_Par2. apply CS_IfStep.
+    apply BS_Eq. simpl.
+  eapply multi_step. apply CS_Par2. apply CS_IfTrue.
   eapply multi_step. apply CS_Par2. apply CS_SeqStep.
     apply CS_AssStep. apply AS_Plus1. apply AS_Id.
   eapply multi_step. apply CS_Par2. apply CS_SeqStep.
-    apply CS_AssStep. apply AS_Plus.  
+    apply CS_AssStep. apply AS_Plus.
   eapply multi_step. apply CS_Par2. apply CS_SeqStep.
     apply CS_Ass.
   eapply multi_step. apply CS_Par2. apply CS_SeqFinish.
 
   eapply multi_step. apply CS_Par2. apply CS_While.
-  eapply multi_step. apply CS_Par2. apply CS_IfStep. 
+  eapply multi_step. apply CS_Par2. apply CS_IfStep.
     apply BS_Eq1. apply AS_Id.
-  eapply multi_step. apply CS_Par2. apply CS_IfStep. 
-    apply BS_Eq. simpl. 
-  eapply multi_step. apply CS_Par2. apply CS_IfTrue. 
+  eapply multi_step. apply CS_Par2. apply CS_IfStep.
+    apply BS_Eq. simpl.
+  eapply multi_step. apply CS_Par2. apply CS_IfTrue.
   eapply multi_step. apply CS_Par2. apply CS_SeqStep.
     apply CS_AssStep. apply AS_Plus1. apply AS_Id.
   eapply multi_step. apply CS_Par2. apply CS_SeqStep.
-    apply CS_AssStep. apply AS_Plus.  
+    apply CS_AssStep. apply AS_Plus.
   eapply multi_step. apply CS_Par2. apply CS_SeqStep.
     apply CS_Ass.
 
   eapply multi_step. apply CS_Par1. apply CS_Ass.
   eapply multi_step. apply CS_Par2. apply CS_SeqFinish.
   eapply multi_step. apply CS_Par2. apply CS_While.
-  eapply multi_step. apply CS_Par2. apply CS_IfStep. 
+  eapply multi_step. apply CS_Par2. apply CS_IfStep.
     apply BS_Eq1. apply AS_Id.
-  eapply multi_step. apply CS_Par2. apply CS_IfStep. 
-    apply BS_Eq. simpl. 
-  eapply multi_step. apply CS_Par2. apply CS_IfFalse. 
-  eapply multi_step. apply CS_ParDone. 
-  eapply multi_refl. 
-  reflexivity. Qed. 
+  eapply multi_step. apply CS_Par2. apply CS_IfStep.
+    apply BS_Eq. simpl.
+  eapply multi_step. apply CS_Par2. apply CS_IfFalse.
+  eapply multi_step. apply CS_ParDone.
+  eapply multi_refl.
+  reflexivity. Qed.
 
 (** More generally... *)
 
@@ -1586,14 +1586,14 @@ Theorem par_loop_any_X:
     par_loop / empty_state ==>*  SKIP / st'
     /\ st' X = n.
 Proof.
-  intros n. 
-  destruct (par_body_n n empty_state). 
+  intros n.
+  destruct (par_body_n n empty_state).
     split; unfold update; reflexivity.
 
   rename x into st.
-  inversion H as [H' [HX HY]]; clear H. 
+  inversion H as [H' [HX HY]]; clear H.
   exists (update st Y 1). split.
-  eapply multi_trans with (par_loop,st). apply H'. 
+  eapply multi_trans with (par_loop,st). apply H'.
   eapply multi_step. apply CS_Par1. apply CS_Ass.
   eapply multi_step. apply CS_Par2. apply CS_While.
   eapply multi_step. apply CS_Par2. apply CS_IfStep.
@@ -1604,7 +1604,7 @@ Proof.
   eapply multi_step. apply CS_ParDone.
   apply multi_refl.
 
-  rewrite update_neq. assumption. intro X; inversion X. 
+  rewrite update_neq. assumption. intro X; inversion X.
 Qed.
 
 End CImp.
@@ -1630,7 +1630,7 @@ Inductive stack_step : state -> prog * stack -> prog * stack -> Prop :=
   | SS_Mult : forall st stk n m p',
     stack_step st (SMult :: p', n::m::stk)  (p', (m*n)::stk).
 
-Theorem stack_step_deterministic : forall st, 
+Theorem stack_step_deterministic : forall st,
   deterministic (stack_step st).
 Proof.
   unfold deterministic. intros st x y1 y2 H1 H2.
@@ -1640,14 +1640,14 @@ Qed.
 Definition stack_multistep st := multi (stack_step st).
 
 (** **** Exercise: 3 stars, advanced (compiler_is_correct) *)
-(** Remember the definition of [compile] for [aexp] given in the 
+(** Remember the definition of [compile] for [aexp] given in the
     [Imp] chapter. We want now to prove [compile] correct with respect
     to the stack machine.
 
-    State what it means for the compiler to be correct according to 
+    State what it means for the compiler to be correct according to
     the stack machine small step semantics and then prove it. *)
 
-Definition compiler_is_correct_statement : Prop := 
+Definition compiler_is_correct_statement : Prop :=
 (* FILL IN HERE *) admit.
 
 
