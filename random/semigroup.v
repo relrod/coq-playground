@@ -1,15 +1,19 @@
-Require Import List.
+Require Import List BinInt.
 Import ListNotations.
+
+Require Import ZArith.
+Open Scope Z_scope.
 
 Open Scope list_scope.
 
-Inductive semigroup (A : Type) (o : A -> A -> A) : Prop :=
-| semigroup_c : (forall (x y z : A),
-                  o x (o y z) = o (o x y) z) -> semigroup A o.
+Class semigroup {A : Type} (o : A -> A -> A) : Prop := {
+  dot_assoc : forall x y z : A,
+                o x (o y z) = o (o x y) z
+}.
 
-Theorem list_concat_semigroup : forall A, semigroup (list A) (@app A).
+Instance list_concat_semigroup {A : Type} : semigroup (@app A).
 Proof.
-  intros. apply semigroup_c. intros.
+  intros. apply Build_semigroup. intros.
   induction x.
   reflexivity.
   simpl.
