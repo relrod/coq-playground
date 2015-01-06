@@ -1,11 +1,3 @@
-Require Import List BinInt.
-Import ListNotations.
-
-Require Import ZArith.
-Open Scope Z_scope.
-
-Open Scope list_scope.
-
 Class semigroup {A : Type} (o : A -> A -> A) : Prop := {
   dot_assoc : forall x y z : A,
                 o x (o y z) = o (o x y) z
