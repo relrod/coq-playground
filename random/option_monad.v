@@ -1,3 +1,5 @@
+Definition identity {A : Type} (x : A) := x.
+
 Class monad (m : Type -> Type) :=
   { bind : forall {a b}, m a -> (a -> m b) -> m b
   ; ret  : forall {a}, a -> m a
@@ -8,13 +10,16 @@ Class monad (m : Type -> Type) :=
               bind (bind x f) g = bind x (fun x => bind (f x) g)
   }.
 
+Notation "f >>= x" := (bind f x) (at level 50).
+
+Definition join {m} `{monad m} {a} (x : m (m a)) : m a :=
+  x >>= identity.
+
 Fixpoint option_flatmap {A B : Type} (o : option A) (f : A -> option B): option B :=
   match o with
     | None => None
     | Some x => f x
   end.
-
-Notation "f >>= x" := (option_flatmap f x) (at level 50).
 
 Definition option_return {A : Type} (o : A) := Some o.
 
