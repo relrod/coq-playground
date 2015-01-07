@@ -284,13 +284,7 @@ Proof.
   rewrite IHn.
   trivial.
 Qed.
-
-
-
-
-
-
-  (** [] *)
+(** [] *)
 
 (** **** Exercise: 2 stars (double_plus) *)
 
@@ -446,6 +440,7 @@ Proof.
   trivial.
   rewrite H.
   trivial.
+Qed.
 
 Theorem mult_comm : forall m n : nat,
  m * n = n * m.
