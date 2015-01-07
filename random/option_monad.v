@@ -8,24 +8,6 @@ Class monad (m : Type -> Type) :=
               bind (bind x f) g = bind x (fun x => bind (f x) g)
   }.
 
-Fixpoint option_map {A B : Type} (f : A -> B) (o : option A): option B :=
-  match o with
-    | None => None
-    | Some x => Some (f x)
-  end.
-
-Definition identity {A : Type} (x : A) := x.
-
-Theorem functor_identity : forall {A : Type} (x : option A), option_map identity x = id x.
-Proof.
-  intros.
-  induction x.
-  simpl.
-  reflexivity.
-  simpl.
-  reflexivity.
-Qed.
-
 Fixpoint option_flatmap {A B : Type} (o : option A) (f : A -> option B): option B :=
   match o with
     | None => None
