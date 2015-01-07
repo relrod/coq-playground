@@ -982,13 +982,10 @@ Theorem bin_un_comm : forall n : bin,
 Proof.
   intros.
   induction n.
-  simpl.
   reflexivity.
-  simpl.
   reflexivity.
   simpl.
   rewrite IHn.
-  simpl.
   reflexivity.
 Qed.
 
