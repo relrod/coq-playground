@@ -571,44 +571,20 @@ Theorem mult_plus_distr_l : forall n m p : nat,
 Proof.
   intros.
   induction n.
-  simpl.
   rewrite <- plus_O_n.
-  simpl.
   rewrite mult_0_r.
-  simpl.
-  trivial.
+  reflexivity.
   simpl.
   rewrite <- mult_n_Sm, <- mult_n_Sm.
   rewrite IHn.
-  rewrite mult_comm.
-  rewrite -> mult_comm.
-  rewrite mult_comm.
-  rewrite <- mult_comm.
-  rewrite <- mult_comm.
   rewrite <- plus_assoc.
-  rewrite <- plus_assoc.
-  assert (I : p * m + p = p + p * m).
-  rewrite plus_comm.
-  trivial.
-  rewrite I.
-  trivial.
+  reflexivity.
 Qed.
-
 
 Theorem mult_plus_distr_r : forall n m p : nat,
   (n + m) * p = (n * p) + (m * p).
 Proof.
   intros.
-
-
-
-
-
-
-
-
-
-
 
 Theorem mult_assoc : forall n m p : nat,
   n * (m * p) = (n * m) * p.
