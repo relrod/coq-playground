@@ -663,7 +663,17 @@ Qed.
     wanting to change your original definitions to make the property
     easier to prove, feel free to do so.) *)
 
-(* FILL IN HERE *)
+Theorem binary_commute : forall n : bin,
+                           bin_to_unary (bin_inc n) = S (bin_to_unary n).
+Proof.
+  intros.
+  induction n.
+  reflexivity.
+  reflexivity.
+  simpl.
+  rewrite IHn.
+  reflexivity.
+Qed.
 (** [] *)
 
 
