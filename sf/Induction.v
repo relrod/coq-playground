@@ -646,6 +646,7 @@ Proof.
   reflexivity.
   rewrite plus_comm.
   reflexivity.
+Qed.
 (** [] *)
 
 
