@@ -1,4 +1,5 @@
 Require Import magma.
+Require Import Coq.Arith.Mult.
 
 Generalizable Variables A o.
 
@@ -15,5 +16,17 @@ Proof.
   reflexivity.
   simpl.
   rewrite IHx.
+  reflexivity.
+Qed.
+
+Instance nat_mult_semigroup : semigroup nat.
+Proof.
+  split.
+  intros.
+  induction x.
+  reflexivity.
+  simpl.
+  rewrite IHx.
+  rewrite mult_plus_distr_r.
   reflexivity.
 Qed.
