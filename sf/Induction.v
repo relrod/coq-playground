@@ -702,7 +702,37 @@ Qed.
     here.
 *)
 
-(* FILL IN HERE *)
+Fixpoint nat_to_bin (n : nat) : bin :=
+  match n with
+    | O => BO
+    | S n' => bin_inc (nat_to_bin n')
+  end.
+
+Theorem nat_bin_nat : forall n : nat,
+                        bin_to_unary (nat_to_bin n) = n.
+Proof.
+  intros.
+  induction n.
+  reflexivity.
+  simpl.
+  rewrite binary_commute.
+  rewrite IHn.
+  reflexivity.
+Qed.
+
+Fixpoint normalize (b : bin) : bin :=
+  match b with
+    | BO => BO
+    | BT b' => match normalize b' with
+                 | BO => BO
+                 | _ => BT (normalize b')
+               end
+    | BM b' => BM (normalize b')
+  end.
+
+
+
+
 (** [] *)
 
 (* ###################################################################### *)
