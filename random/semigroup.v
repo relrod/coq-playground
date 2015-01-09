@@ -1,4 +1,5 @@
 Require Import magma.
+Require Import ZArith.
 Require Import Coq.Arith.Mult.
 
 Generalizable Variables A o.
@@ -29,4 +30,10 @@ Proof.
   rewrite IHx.
   rewrite mult_plus_distr_r.
   reflexivity.
+Qed.
+
+Instance z_add_semigroup : semigroup Z.
+Proof.
+  split.
+  apply Zplus_assoc.
 Qed.

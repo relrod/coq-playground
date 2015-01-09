@@ -1,4 +1,5 @@
 Require Import semigroup.
+Require Import ZArith.
 Require Import Coq.Arith.Mult.
 
 Generalizable Variables A o.
@@ -23,7 +24,7 @@ Proof.
   reflexivity.
 Qed.
 
-Instance nat_mult_monoid : monoid nat 1.
+Instance nat_mult_monoid : monoid nat 1%nat.
 Proof.
   split.
   intros.
@@ -31,5 +32,18 @@ Proof.
   reflexivity.
   intros.
   rewrite mult_1_r.
+  reflexivity.
+Qed.
+
+Instance z_add_monoid : monoid Z 0%Z.
+Proof.
+  split.
+  intros.
+  reflexivity.
+  intros.
+  induction x.
+  reflexivity.
+  simpl.
+  reflexivity.
   reflexivity.
 Qed.
