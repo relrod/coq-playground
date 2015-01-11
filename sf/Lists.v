@@ -954,7 +954,9 @@ Qed.
 Theorem count_member_nonzero : forall (s : bag),
   ble_nat 1 (count 1 (1 :: s)) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  reflexivity.
+Qed.
+
 
 (** The following lemma about [ble_nat] might help you in the next proof. *)
 
@@ -970,7 +972,18 @@ Proof.
 Theorem remove_decreases_count: forall (s : bag),
   ble_nat (count 0 (remove_one 0 s)) (count 0 s) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction s.
+  simpl.
+  reflexivity.
+  destruct n.
+  simpl.
+  rewrite ble_n_Sn.
+  reflexivity.
+  simpl.
+  rewrite IHs.
+  reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, optional (bag_count_sum) *)
@@ -987,10 +1000,16 @@ Proof.
 
 There is a hard way and an easy way to solve this exercise.
 *)
-
-(* FILL IN HERE *)
+Theorem rev_injective : forall (l1 l2 : natlist), rev l1 = rev l2 -> l1 = l2.
+Proof.
+  intros.
+  simpl.
+  rewrite <- rev_involutive.
+  rewrite <- H.
+  rewrite rev_involutive.
+  trivial.
+Qed.
 (** [] *)
-
 
 (* ###################################################### *)
 (** * Options *)
@@ -1072,16 +1091,19 @@ Definition option_elim (d : nat) (o : natoption) : nat :=
    have to pass a default element for the [nil] case.  *)
 
 Definition hd_opt (l : natlist) : natoption :=
-  (* FILL IN HERE *) admit.
+  match l with
+    | [] => None
+    | h :: _ => Some h
+  end.
 
 Example test_hd_opt1 : hd_opt [] = None.
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 
 Example test_hd_opt2 : hd_opt [1] = Some 1.
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 
 Example test_hd_opt3 : hd_opt [5;6] = Some 5.
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (** **** Exercise: 1 star, optional (option_elim_hd) *)
@@ -1090,7 +1112,13 @@ Example test_hd_opt3 : hd_opt [5;6] = Some 5.
 Theorem option_elim_hd : forall (l:natlist) (default:nat),
   hd default l = option_elim default (hd_opt l).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  destruct l.
+  simpl.
+  reflexivity.
+  simpl.
+  reflexivity.
+Qed.
 (** [] *)
 
 (* ###################################################### *)
@@ -1139,7 +1167,15 @@ Fixpoint find (key : nat) (d : dictionary) : natoption :=
 Theorem dictionary_invariant1' : forall (d : dictionary) (k v: nat),
   (find k (insert k v d)) = Some v.
 Proof.
- (* FILL IN HERE *) Admitted.
+  intros.
+  destruct d.
+  simpl.
+  rewrite <- beq_nat_refl.
+  reflexivity.
+  simpl.
+  rewrite <- beq_nat_refl.
+  reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 1 star (dictionary_invariant2) *)
@@ -1148,7 +1184,15 @@ Proof.
 Theorem dictionary_invariant2' : forall (d : dictionary) (m n o: nat),
   beq_nat m n = false -> find m d = find m (insert n o d).
 Proof.
- (* FILL IN HERE *) Admitted.
+  intros.
+  destruct d.
+  simpl.
+  rewrite H.
+  reflexivity.
+  simpl.
+  rewrite H.
+  reflexivity.
+Qed.
 (** [] *)
 
 
