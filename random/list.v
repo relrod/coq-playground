@@ -59,3 +59,43 @@ Proof.
   rewrite IHxs.
   reflexivity.
 Qed.
+
+Fixpoint map {a b : Type} (f : a -> b) (l : list a) : list b :=
+  match l with
+    | nil => nil b
+    | cons h t => cons b (f h) (map f t)
+  end.
+
+Definition id' {a} x : a := x.
+
+Theorem map_id_id_map : forall (a : Type)
+                               (xs : list a),
+                          map id' xs = xs.
+Proof.
+  intros.
+  induction xs.
+  simpl.
+  reflexivity.
+  simpl.
+  rewrite IHxs.
+  unfold id'.
+  reflexivity.
+Qed.
+
+Definition compose {a b c} (f : a -> b) (g : b -> c) : a -> c :=
+  fun x => g (f x).
+
+Theorem map_f_g_compose : forall (a b c : Type)
+                                 (f : a -> b)
+                                 (g : b -> c)
+                                 (xs : list a),
+                            map (compose f g) xs = compose (map f) (map g) xs.
+Proof.
+  intros.
+  induction xs.
+  simpl.
+  reflexivity.
+  simpl.
+  rewrite IHxs.
+  reflexivity.
+Qed.
