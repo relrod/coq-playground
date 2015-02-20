@@ -99,3 +99,15 @@ Proof.
   rewrite IHxs.
   reflexivity.
 Qed.
+
+Fixpoint fold_right {a b : Type} (f : a -> b -> b) (b' : b) (la : list a) : b:=
+  match la with
+    | nil => b'
+    | cons h t => fold_right f (f h b') t
+  end.
+
+Definition flatten {a : Type} (xs : list (list a)) : list a :=
+  fold_right append (nil a) xs.
+
+Definition flat_map {a b : Type} (f : a -> list b) (l : list a) : list b :=
+  flatten (map f l).
