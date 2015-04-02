@@ -1,5 +1,7 @@
 Module foo.
 
+Require Import option_monad.
+
 Inductive list (a : Type) : Type :=
   | nil : list a
   | cons : a -> list a -> list a.
@@ -7,6 +9,8 @@ Inductive list (a : Type) : Type :=
 Infix "::" := cons (at level 60, right associativity).
 Notation "[ ]" := nil.
 Notation "[ x ; .. ; y ]" := (cons x .. (cons y nil) ..).
+
+Set Implicit Arguments.
 
 Definition head {a : Type} (default : a) (l : list a) : a :=
   match l with
@@ -109,5 +113,7 @@ Fixpoint fold_right {a b : Type} (f : a -> b -> b) (b' : b) (la : list a) : b:=
 Definition flatten {a : Type} (xs : list (list a)) : list a :=
   fold_right append (nil a) xs.
 
-Definition flat_map {a b : Type} (f : a -> list b) (l : list a) : list b :=
+Definition flat_map {a b : Type} (l : list a) (f : a -> list b) : list b :=
   flatten (map f l).
+
+Definition singleton {a : Type} (x : a) := cons a x (nil a).
