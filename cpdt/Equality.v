@@ -8,6 +8,7 @@
  *)
 
 (* begin hide *)
+Require Import Coq.Lists.List.
 Require Import Eqdep JMeq List.
 
 Require Import CpdtTactics.

@@ -8,6 +8,7 @@
  *)
 
 (* begin hide *)
+Require Import Coq.Lists.List.
 Require Import FunctionalExtensionality List.
 
 Require Import CpdtTactics DepList.

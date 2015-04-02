@@ -9,6 +9,8 @@
 
 (* Dependent list types presented in Chapter 9 *)
 
+Require Import Coq.Lists.List.
+
 Require Import Arith List CpdtTactics.
 
 Set Implicit Arguments.

@@ -8,6 +8,8 @@
  *)
 
 (* begin hide *)
+Require Import Coq.Lists.List.
+Require Import Coq.Bool.Bool.
 Require Import Arith Bool List.
 
 Require Import CpdtTactics MoreSpecif.

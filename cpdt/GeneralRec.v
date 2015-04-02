@@ -8,6 +8,7 @@
  *)
 
 (* begin hide *)
+Require Import Coq.Lists.List.
 Require Import Arith List.
 
 Require Import CpdtTactics Coinductive.

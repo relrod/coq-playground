@@ -9,6 +9,7 @@
 
 (* begin hide *)
 
+Require Import Coq.Lists.List.
 Require Import List.
 
 Require Import CpdtTactics.
