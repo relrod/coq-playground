@@ -1,0 +1,6 @@
+-R . Algae
+./Magma.v
+./Semigroup.v
+./Monoid.v
+./Group.v
+./Instances.v
