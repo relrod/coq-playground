@@ -37,13 +37,20 @@ Open Scope string_scope.
 Instance magma_str_concat : Magma string append.
 Proof. reflexivity. Qed.
 
+Lemma string_assoc :
+  (forall a x y, (String a x) <+> y = String a (x <+> y)).
+Proof. reflexivity. Qed.
+
 Instance semigroup_str_concat : Semigroup magma_str_concat.
 Proof.
   split.
   intros.
   induction x.
-  trivial.
-Admitted.
+  reflexivity.
+  rewrite string_assoc.
+  rewrite IHx.
+  reflexivity.
+Qed.
 
 Instance monoid_str_concat : Monoid semigroup_str_concat EmptyString.
 Proof.
@@ -53,8 +60,11 @@ Proof.
   intros.
   induction x.
   trivial.
-  admit.
-Admitted.
+  rewrite string_assoc.
+  rewrite IHx.
+  reflexivity.
+Qed.
+
 
 (* Functions form a monoid under composition. *)
 Instance magma_functions {A} : Magma (A -> A) compose.
