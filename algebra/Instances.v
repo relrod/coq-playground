@@ -109,7 +109,7 @@ Proof.
   apply Z.add_0_r.
 Qed.
 
-Instance group_ints : Group monoid_ints_add Z.opp.
+Instance group_ints_add : Group monoid_ints_add Z.opp.
 Proof.
   split.
   intros.
