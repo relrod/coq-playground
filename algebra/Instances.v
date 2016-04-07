@@ -67,38 +67,49 @@ Qed.
 
 
 (* Functions form a monoid under composition. *)
-Instance magma_functions {A} : Magma (A -> A) compose.
+Variable A : Type.
+Instance magma_functions  : Magma (A -> A) compose.
 Proof. reflexivity. Qed.
 
-Instance semigroup_functions {A} : Semigroup magma_functions.
+Instance semigroup_functions : Semigroup magma_functions.
+Proof.
+  split.
+  reflexivity.
+Qed.
 
-Instance monoid_functions {A} : Monoid (A -> A) compose id.
+Definition id x : A := x.
+
+Instance monoid_functions : Monoid semigroup_functions id.
 Proof.
   split.
   intros.
-  rewrite compose_assoc.
-  trivial.
-  intros.
-  rewrite compose_id_left.
-  trivial.
-  intros.
-  rewrite compose_id_right.
-  trivial.
+  reflexivity.
+  reflexivity.
 Qed.
 
 (* They only form a group if they are all isomorphisms in the respective *)
 (* category (bijections in Set). So we can't say much here. *)
 
-Instance monoid_ints : Monoid Z Z.add Z0.
+
+Instance magma_ints_add : Magma Z Z.add.
+Proof. reflexivity. Qed.
+
+Instance semigroup_ints_add : Semigroup magma_ints_add.
 Proof.
   split.
   intros.
-  apply Z.add_assoc.
+  rewrite Z.add_assoc.
+  reflexivity.
+Qed.
+
+Instance monoid_ints_add : Monoid semigroup_ints_add Z0.
+Proof.
+  split.
   apply Z.add_0_l.
   apply Z.add_0_r.
 Qed.
 
-Instance group_ints : Group monoid_ints Z.opp.
+Instance group_ints : Group monoid_ints_add Z.opp.
 Proof.
   split.
   intros.
