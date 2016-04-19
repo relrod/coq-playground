@@ -103,12 +103,28 @@ Theorem cancel_left `{Group} :
   forall a b y,
     y <+> a = y <+> b -> a = b.
 Proof.
-  admit. (* TODO!! *)
-Admitted.
+  intros.
+  assert (inverse y <+> (y <+> a) = inverse y <+> (y <+> b)) as Q.
+  rewrite H3.
+  reflexivity.
+  repeat rewrite dot_assoc in Q.
+  rewrite inverse_left in Q.
+  repeat rewrite zero_left in Q.
+  rewrite Q.
+  reflexivity.
+Qed.
 
 Theorem cancel_right `{Group} :
   forall a b y,
     a <+> y = b <+> y -> a = b.
 Proof.
-  admit. (* TODO!! *)
-Admitted.
+  intros.
+  assert ((a <+> y) <+> inverse y = (b <+> y) <+> inverse y) as Q.
+  rewrite H3.
+  reflexivity.
+  repeat rewrite <- dot_assoc in Q.
+  rewrite inverse_right in Q.
+  repeat rewrite zero_right in Q.
+  rewrite Q.
+  reflexivity.
+Qed.
